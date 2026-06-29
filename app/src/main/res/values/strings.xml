@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- App -->
+    <string name="app_name">PrénomBattle</string>
+    <string name="app_tagline">Aide au choix du prénom de bébé</string>
+
+    <!-- Common -->
+    <string name="btn_cancel">Annuler</string>
+    <string name="btn_launch_battle">⚔   Lancer la bataille</string>
+    <string name="btn_preparing">Préparation…</string>
+    <string name="cd_back">Retour</string>
+    <string name="label_prenom">prénom</string>
+    <string name="label_prenoms">prénoms</string>
+    <string name="label_since">Depuis</string>
+
+    <!-- Home -->
+    <string name="btn_new_session">＋   Nouvelle session</string>
+    <string name="btn_manage_lists">Gérer les listes</string>
+    <string name="btn_start_battle">⚔  Commencer la bataille</string>
+    <string name="btn_resume_battle">▶  Reprendre la bataille</string>
+    <string name="btn_view_results">🏆  Consulter les résultats</string>
+    <string name="btn_restart_battle">🔄  Recommencer</string>
+    <string name="dialog_delete_session_title">Supprimer la session ?</string>
+    <string name="dialog_delete_session_message">La session et toutes les listes seront définitivement effacées.</string>
+    <string name="btn_delete_all">Tout effacer</string>
+    <string name="label_lists_validated">· ✓ Validées</string>
+
+    <!-- Setup -->
+    <string name="title_new_session">Nouvelle session</string>
+    <string name="label_gender_section">Genre recherché</string>
+    <string name="label_gender_boy">Garçon</string>
+    <string name="label_gender_girl">Fille</string>
+    <string name="label_parent_1">Parent 1</string>
+    <string name="label_parent_2">Parent 2</string>
+    <string name="label_solo_mode">Mode solo</string>
+    <string name="label_solo_mode_desc">Un seul parent choisit</string>
+    <string name="label_first_name">Prénom</string>
+    <string name="placeholder_name_p1">ex. Sofia</string>
+    <string name="placeholder_name_p2">ex. Thomas</string>
+    <string name="label_password">Mot de passe</string>
+    <string name="label_confirm_password">Confirmer le mot de passe</string>
+    <string name="error_passwords_mismatch">Les mots de passe ne correspondent pas</string>
+    <string name="btn_validate">Valider ✓</string>
+
+    <!-- Auth -->
+    <string name="title_connexion">Connexion</string>
+    <string name="label_who_connects">Qui se connecte ?</string>
+    <string name="btn_checking">Vérification…</string>
+    <string name="btn_sign_in">Se connecter</string>
+    <string name="label_list_validated">· ✓ Liste validée</string>
+
+    <!-- Launch -->
+    <string name="title_launch">Lancement</string>
+    <string name="label_ready_for_battle">Prêts pour la bataille ?</string>
+    <string name="label_lists_closed">Les listes sont maintenant fermées</string>
+    <string name="label_total_in_arena">Total dans l\'arène</string>
+    <string name="label_objective" tools:ignore="PluralsCandidate">Objectif : %1$d finalistes · ~%2$d rounds</string>
+    <string name="label_secret_order">Ordre de passage secret — les prénoms seront tirés au sort</string>
+    <plurals name="label_total_prenoms">
+        <item quantity="one">%d prénom</item>
+        <item quantity="other">%d prénoms</item>
+    </plurals>
+
+    <!-- Battle -->
+    <string name="label_which_name_survives">Quel prénom survivra ?</string>
+    <string name="label_other_eliminated">🗑 L\'autre sera définitivement éliminé</string>
+    <string name="btn_choose">Choisir</string>
+    <string name="label_auto_qualified">AUTO-QUALIFIÉ</string>
+    <string name="label_auto_pass_desc">Aucun adversaire pour ce round — passe automatiquement</string>
+    <string name="btn_continue">Continuer →</string>
+    <string name="label_round_n">Round %d</string>
+    <string name="label_round_done" tools:ignore="PluralsCandidate">Round %d terminé</string>
+    <plurals name="label_survivors">
+        <item quantity="one">%d survivant</item>
+        <item quantity="other">%d survivants</item>
+    </plurals>
+    <plurals name="label_eliminated_count">
+        <item quantity="one">%d éliminé</item>
+        <item quantity="other">%d éliminés</item>
+    </plurals>
+    <string name="label_advance_to_round">✅ Passent au round %d</string>
+    <string name="label_eliminated_section">❌ Éliminés</string>
+    <string name="btn_start_next_round">→ Lancer le round %d</string>
+
+    <!-- Results -->
+    <string name="title_finalists">Vos finalistes !</string>
+    <string name="label_finalists_survived_one" tools:ignore="PluralsCandidate">Ce prénom a survécu à %d round de bataille</string>
+    <string name="label_finalists_survived" tools:ignore="PluralsCandidate">Ces %1$d prénoms ont survécu à %2$d rounds de bataille</string>
+    <string name="label_your_turn_to_choose">À vous de choisir 🤝</string>
+    <string name="label_names_tied">Ces prénoms sont à égalité — à vous deux de trancher !</string>
+    <string name="btn_replay">🔄   Rejouer (nouvel ordre)</string>
+    <string name="btn_back_to_home">← Retour à l\'accueil</string>
+
+    <!-- Search -->
+    <string name="label_search_pane">Chercher</string>
+    <string name="label_my_list_pane">Ma liste</string>
+    <string name="btn_finish">Terminer ✓</string>
+    <string name="tab_az">A→Z</string>
+    <string name="tab_top100">Top 100</string>
+    <string name="tab_free">Libre</string>
+    <string name="placeholder_filter">Filtrer…</string>
+    <string name="label_enter_free_name">Saisissez le prénom de votre choix</string>
+    <string name="placeholder_free_name">ex. Mahault…</string>
+    <string name="btn_add_to_list">＋   Ajouter à ma liste</string>
+    <string name="label_insee_suggestions">Suggestions INSEE</string>
+    <string name="label_free_spelling_note">L\'orthographe saisie sera utilisée — qu\'elle soit dans la base INSEE ou non.</string>
+    <string name="label_empty_list">Aucun prénom encore.\nAjoutez-en depuis « Chercher ».</string>
+    <string name="cd_view_detail_with_meaning">Voir la fiche (signification disponible)</string>
+    <string name="cd_view_detail">Voir la fiche</string>
+    <string name="cd_remove">Retirer</string>
+    <string name="cd_add">Ajouter</string>
+
+    <!-- Name detail sheet -->
+    <string name="label_popularity">Popularité</string>
+    <string name="label_peak">Pic</string>
+    <string name="label_births">Naissances</string>
+    <string name="label_evolution">Évolution %d → 2024</string>
+</resources>

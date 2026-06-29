@@ -1,0 +1,2 @@
+-keep class com.telen.namebattle.** { *; }
+-keepclassmembers class * { @androidx.room.* <methods>; }
