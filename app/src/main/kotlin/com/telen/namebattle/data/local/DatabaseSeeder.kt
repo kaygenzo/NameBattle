@@ -3,6 +3,7 @@ package com.telen.namebattle.data.local
 import android.content.Context
 import com.telen.namebattle.data.local.dao.FirstNameDao
 import com.telen.namebattle.data.local.entity.FirstNameEntity
+import com.telen.namebattle.data.local.entity.MeaningUpdate
 import com.telen.namebattle.util.toBaseAscii
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
@@ -14,13 +15,10 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeToSequence
 import timber.log.Timber
 
-/**
- * Seeds the names table from assets/prenoms_insee.json on first launch.
- */
 class DatabaseSeeder(
     private val context: Context,
     private val firstNameDao: FirstNameDao,
-    private val prefs: AppPreferences
+    private val prefs: AppPreferences,
 ) {
     private val jsonFormat = Json {
         ignoreUnknownKeys = true
@@ -29,60 +27,77 @@ class DatabaseSeeder(
 
     private val mutex = Mutex()
 
-    @OptIn(kotlinx.serialization.ExperimentalSerializationApi::class)
     suspend fun seedIfNeeded() = mutex.withLock {
         withContext(Dispatchers.IO) {
-            if (prefs.isDbSeeded() && firstNameDao.count() > 0) return@withContext
-            try {
-                context.assets.open("prenoms_insee.json").use { inputStream ->
-                    var count = 0
-                    jsonFormat.decodeToSequence<JsonFirstName>(inputStream)
-                        .chunked(500)
-                        .forEach { batch ->
-                            val entities = batch.flatMap { dto ->
-                                val genders = when (dto.gender.uppercase()) {
-                                    "F" -> listOf("GIRL")
-                                    "M" -> listOf("BOY")
-                                    else -> listOf("BOY", "GIRL")
-                                }
+            if (!prefs.isDbSeeded() || firstNameDao.count() == 0) seedNames()
+            if (!prefs.isMeaningsSeeded()) seedMeanings()
+        }
+    }
 
-                                fun sumFrom(fromYear: Int): Int {
-                                    if (dto.yearlyCounts.isEmpty()) return dto.total
-                                    return dto.yearlyCounts
-                                        .filterKeys { (it.toIntOrNull() ?: 0) >= fromYear }
-                                        .values
-                                        .sum()
-                                }
-
-                                genders.map { gender ->
-                                    FirstNameEntity(
-                                        name = dto.name,
-                                        nameLower = dto.name.lowercase(),
-                                        firstLetter = if (dto.name.isNotEmpty()) {
-                                            dto.name.first().toBaseAscii().toString()
-                                        } else {
-                                            ""
-                                        },
-                                        gender = gender,
-                                        births1900 = sumFrom(1900),
-                                        births1980 = sumFrom(1980),
-                                        births2000 = sumFrom(2000),
-                                        births2010 = sumFrom(2010),
-                                        totalBirths = dto.total,
-                                        peakYear = dto.peakYear,
-                                        firstYear = dto.firstYear
-                                    )
-                                }
+    @OptIn(kotlinx.serialization.ExperimentalSerializationApi::class)
+    private suspend fun seedNames() {
+        try {
+            context.assets.open("prenoms_insee.json").use { inputStream ->
+                var count = 0
+                jsonFormat.decodeToSequence<JsonFirstName>(inputStream)
+                    .chunked(500)
+                    .forEach { batch ->
+                        val entities = batch.flatMap { dto ->
+                            val genders = when (dto.gender.uppercase()) {
+                                "F" -> listOf("GIRL")
+                                "M" -> listOf("BOY")
+                                else -> listOf("BOY", "GIRL")
                             }
-                            firstNameDao.insertAll(entities)
-                            count += entities.size
+
+                            fun sumFrom(fromYear: Int): Int {
+                                if (dto.yearlyCounts.isEmpty()) return dto.total
+                                return dto.yearlyCounts
+                                    .filterKeys { (it.toIntOrNull() ?: 0) >= fromYear }
+                                    .values
+                                    .sum()
+                            }
+
+                            genders.map { gender ->
+                                FirstNameEntity(
+                                    name = dto.name,
+                                    nameLower = dto.name.lowercase(),
+                                    firstLetter = if (dto.name.isNotEmpty()) {
+                                        dto.name.first().toBaseAscii().toString()
+                                    } else {
+                                        ""
+                                    },
+                                    gender = gender,
+                                    births1900 = sumFrom(1900),
+                                    births1980 = sumFrom(1980),
+                                    births2000 = sumFrom(2000),
+                                    births2010 = sumFrom(2010),
+                                    totalBirths = dto.total,
+                                    peakYear = dto.peakYear,
+                                    firstYear = dto.firstYear,
+                                )
+                            }
                         }
-                    prefs.markDbSeeded()
-                    Timber.i("DB seeded with $count prénoms")
-                }
-            } catch (e: Exception) {
-                Timber.e(e, "Seeding failed")
+                        firstNameDao.insertAll(entities)
+                        count += entities.size
+                    }
+                prefs.markDbSeeded()
+                Timber.i("DB seeded with $count prénoms")
             }
+        } catch (e: Exception) {
+            Timber.e(e, "Names seeding failed")
+        }
+    }
+
+    private suspend fun seedMeanings() {
+        try {
+            val bytes = context.assets.open("meanings.json").use { it.readBytes() }
+            val entries: List<JsonMeaning> = jsonFormat.decodeFromString(bytes.decodeToString())
+            val updates = entries.map { MeaningUpdate(it.nameRaw, it.meaning, it.origin) }
+            updates.chunked(500).forEach { batch -> firstNameDao.updateMeaningsBatch(batch) }
+            prefs.markMeaningsSeeded()
+            Timber.i("Meanings seeded: ${updates.size} entries")
+        } catch (e: Exception) {
+            Timber.e(e, "Meanings seeding failed")
         }
     }
 }
@@ -94,5 +109,12 @@ private data class JsonFirstName(
     val total: Int = 0,
     @SerialName("yearly_counts") val yearlyCounts: Map<String, Int> = emptyMap(),
     @SerialName("peak_year") val peakYear: Int = 0,
-    @SerialName("first_year") val firstYear: Int = 0
+    @SerialName("first_year") val firstYear: Int = 0,
+)
+
+@Serializable
+private data class JsonMeaning(
+    @SerialName("name_raw") val nameRaw: String,
+    val meaning: String,
+    val origin: String? = null,
 )

@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.google.services)
     id("jacoco")
 }
 
@@ -117,11 +116,6 @@ dependencies {
     implementation(libs.core.splashscreen)
 
     debugImplementation(libs.compose.ui.tooling)
-
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.config.ktx)
-    implementation(libs.firebase.storage.ktx)
-    implementation(libs.coroutines.play.services)
 
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
