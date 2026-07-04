@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.ksp)
+    id("jacoco")
 }
 
 // Auto-generate dev keystore on first build
@@ -61,6 +62,7 @@ android {
         debug {
             signingConfig = signingConfigs.getByName("dev")
             applicationIdSuffix = ".debug"
+            enableUnitTestCoverage = true
         }
         release {
             isMinifyEnabled = true
@@ -118,4 +120,49 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.mockk)
     testImplementation(libs.coroutines.test)
+}
+
+val coverageExcludes = listOf(
+    // DI modules
+    "**/di/**",
+    // Compose screens, previews, components, theme, navigation
+    "**/*Screen*",
+    "**/*Previews*",
+    "**/components/**",
+    "**/theme/**",
+    "**/navigation/**",
+    // App entry points
+    "**/MainActivity*",
+    "**/NameBattleApp*",
+    "**/*Sheet*",
+    "**/*Row*",
+    // Room / KSP generated
+    "**/*_Impl*",
+    "**/*Dao_Impl*",
+    "**/BuildConfig*",
+)
+
+tasks.register<JacocoReport>("jacocoUnitTestReport") {
+    dependsOn("testDebugUnitTest")
+    group = "verification"
+    description = "Generates JaCoCo coverage report excluding Compose UI and DI"
+
+    reports {
+        xml.required = true
+        html.required = true
+        html.outputLocation = layout.buildDirectory.dir("reports/jacoco/html")
+        xml.outputLocation = layout.buildDirectory.file("reports/jacoco/report.xml")
+    }
+
+    classDirectories.setFrom(
+        fileTree(layout.buildDirectory.dir("intermediates/built_in_kotlinc/debug/compileDebugKotlin/classes")) {
+            exclude(coverageExcludes)
+        }
+    )
+    sourceDirectories.setFrom(files("src/main/kotlin"))
+    executionData.setFrom(
+        fileTree(layout.buildDirectory) {
+            include("outputs/unit_test_code_coverage/debugUnitTest/*.exec")
+        }
+    )
 }
