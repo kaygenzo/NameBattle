@@ -9,7 +9,7 @@ import com.telen.namebattle.domain.repository.SessionRepository
 import org.koin.dsl.module
 
 val repositoryModule = module {
-    single<FirstNameRepository> { FirstNameRepositoryImpl(dao = get(), meaningRemote = get()) }
+    single<FirstNameRepository> { FirstNameRepositoryImpl(dao = get()) }
     single<SessionRepository> { SessionRepositoryImpl(dao = get()) }
     single<BattleRepository> { BattleRepositoryImpl(dao = get()) }
 }

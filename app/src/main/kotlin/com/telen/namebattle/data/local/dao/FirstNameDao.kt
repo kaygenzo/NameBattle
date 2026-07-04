@@ -4,7 +4,9 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.telen.namebattle.data.local.entity.FirstNameEntity
+import com.telen.namebattle.data.local.entity.MeaningUpdate
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -99,4 +101,15 @@ interface FirstNameDao {
 
     @Query("UPDATE first_names SET meaning = :meaning, origin = :origin, has_meaning = 1 WHERE id = :id")
     suspend fun updateMeaning(id: Long, meaning: String, origin: String?)
+
+    @Query("UPDATE first_names SET meaning = :meaning, origin = :origin, has_meaning = 1 WHERE name_lower = LOWER(:nameRaw) AND is_custom = 0")
+    suspend fun updateMeaningByName(nameRaw: String, meaning: String, origin: String?)
+
+    @Query("SELECT UPPER(name) FROM first_names WHERE has_meaning = 1 AND is_custom = 0")
+    suspend fun getNamesWithMeaning(): List<String>
+
+    @Transaction
+    suspend fun updateMeaningsBatch(entries: List<MeaningUpdate>) {
+        entries.forEach { updateMeaningByName(it.nameRaw, it.meaning, it.origin) }
+    }
 }

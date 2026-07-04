@@ -3,7 +3,6 @@ package com.telen.namebattle.data.repository
 import com.telen.namebattle.data.local.dao.FirstNameDao
 import com.telen.namebattle.data.local.entity.FirstNameEntity
 import com.telen.namebattle.data.mapper.toDomain
-import com.telen.namebattle.data.remote.MeaningRemoteDataSource
 import com.telen.namebattle.domain.model.FirstName
 import com.telen.namebattle.domain.model.Gender
 import com.telen.namebattle.domain.repository.FirstNameRepository
@@ -13,7 +12,6 @@ import kotlinx.coroutines.flow.map
 
 class FirstNameRepositoryImpl(
     private val dao: FirstNameDao,
-    private val meaningRemote: MeaningRemoteDataSource,
 ) : FirstNameRepository {
 
     override fun searchByFirstLetter(letter: Char, gender: Gender): Flow<List<FirstName>> =
@@ -39,15 +37,10 @@ class FirstNameRepositoryImpl(
     override suspend fun getByIds(ids: List<Long>): List<FirstName> =
         dao.getByIds(ids).map { it.toDomain() }
 
-    override suspend fun getNameDetail(id: Long): FirstName? {
-        val local = dao.getById(id)?.toDomain() ?: return null
-        if (local.meaning != null) return local            // already cached
-        val info = meaningRemote.meaningFor(local.name) ?: return local
-        dao.updateMeaning(id, info.meaning, info.origin)
-        return local.copy(meaning = info.meaning, origin = info.origin, hasMeaning = true)
-    }
+    override suspend fun getNameDetail(id: Long): FirstName? = dao.getById(id)?.toDomain()
 
-    override suspend fun namesWithMeaning(): Set<String> = meaningRemote.availableNames()
+    override suspend fun namesWithMeaning(): Set<String> =
+        dao.getNamesWithMeaning().toSet()
 
     override suspend fun getOrCreateCustom(name: String, gender: Gender): FirstName {
         val trimmed = name.trim()
