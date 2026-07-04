@@ -15,6 +15,5 @@ data class AuthUiState(
     val password: String = "",
     val isChecking: Boolean = false,
     val error: String? = null,
-) {
-    val canStartBattle: Boolean get() = parents.isNotEmpty() && parents.all { it.shortlistCount > 0 }
-}
+    val canStartBattle: Boolean = false,
+)

@@ -51,6 +51,9 @@ import com.telen.namebattle.presentation.theme.NbTheme
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
+private val ALPHABET = ('A'..'Z').toList()
+private val TOP_YEARS = listOf(1900, 1980, 2000, 2010)
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
@@ -255,7 +258,7 @@ private fun LetterChips(state: SearchUiState, onLetterChange: (Char) -> Unit) {
             .fillMaxWidth()
             .padding(bottom = 10.dp),
     ) {
-        items(state.letters) { l ->
+        items(ALPHABET) { l ->
             val on = state.selectedLetter == l && state.query.isBlank()
             Text(
                 l.toString(),
@@ -283,7 +286,7 @@ private fun YearSelector(state: SearchUiState, onTopYearChange: (Int) -> Unit) {
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(stringResource(R.string.label_since), style = MaterialTheme.typography.bodySmall, color = c.textMid)
-        state.topYears.forEach { y ->
+        TOP_YEARS.forEach { y ->
             val on = state.topYear == y
             Text(
                 y.toString(),

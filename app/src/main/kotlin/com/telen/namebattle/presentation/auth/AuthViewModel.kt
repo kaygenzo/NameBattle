@@ -55,7 +55,8 @@ class AuthViewModel(
                 )
             }
             val total = options.sumOf { it.shortlistCount }
-            _state.update { it.copy(isLoading = false, parents = options, totalNames = total) }
+            val canStart = options.isNotEmpty() && options.all { it.shortlistCount > 0 }
+            _state.update { it.copy(isLoading = false, parents = options, totalNames = total, canStartBattle = canStart) }
         }
     }
 

@@ -58,6 +58,7 @@ class LaunchViewModel(
                     total = total,
                     targetFinalists = minOf(target, max(total, 1)),
                     roundsEstimate = rounds,
+                    canStart = c1 > 0 && (session.parent2 == null || c2 > 0),
                 )
             }
         }

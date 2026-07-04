@@ -111,7 +111,11 @@ class SearchViewModel(
             getShortlistIdsFlow(parentId).collect { ids ->
                 val rows = getNamesByIds(ids)
                     .map { NameRow(it.id, it.name, true, it.name.uppercase() in meaningNames) }
-                _state.update { it.copy(shortlist = rows, shortlistCount = ids.size) }
+                _state.update { s ->
+                    val count = ids.size
+                    val subtitle = "${s.parentName} · $count ${if (count > 1) "prénoms" else "prénom"}"
+                    s.copy(shortlist = rows, shortlistCount = count, subtitle = subtitle)
+                }
             }
         }
     }

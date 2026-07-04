@@ -28,28 +28,40 @@ class SetupViewModel(
 
     fun onGenderChange(g: Gender) = _state.update { it.copy(gender = g) }
     fun onSoloToggle(v: Boolean) {
-        _state.update { it.copy(soloMode = v) }
+        _state.update { it.copy(soloMode = v).recompute() }
         if (_state.value.canCreate) createSession()
     }
 
     // Parent 1
-    fun onParent1Name(v: String) = _state.update { it.copy(parent1Name = v) }
-    fun onParent1Password(v: String) = _state.update { it.copy(parent1Password = v) }
-    fun onParent1Confirm(v: String) = _state.update { it.copy(parent1Confirm = v) }
+    fun onParent1Name(v: String) = _state.update { it.copy(parent1Name = v).recompute() }
+    fun onParent1Password(v: String) = _state.update { it.copy(parent1Password = v).recompute() }
+    fun onParent1Confirm(v: String) = _state.update { it.copy(parent1Confirm = v).recompute() }
     fun lockParent1() {
         if (!_state.value.parent1CanLock) return
-        _state.update { it.copy(parent1Locked = true) }
+        _state.update { it.copy(parent1Locked = true).recompute() }
         if (_state.value.canCreate) createSession()
     }
 
     // Parent 2
-    fun onParent2Name(v: String) = _state.update { it.copy(parent2Name = v) }
-    fun onParent2Password(v: String) = _state.update { it.copy(parent2Password = v) }
-    fun onParent2Confirm(v: String) = _state.update { it.copy(parent2Confirm = v) }
+    fun onParent2Name(v: String) = _state.update { it.copy(parent2Name = v).recompute() }
+    fun onParent2Password(v: String) = _state.update { it.copy(parent2Password = v).recompute() }
+    fun onParent2Confirm(v: String) = _state.update { it.copy(parent2Confirm = v).recompute() }
     fun lockParent2() {
         if (!_state.value.parent2CanLock) return
-        _state.update { it.copy(parent2Locked = true) }
+        _state.update { it.copy(parent2Locked = true).recompute() }
         if (_state.value.canCreate) createSession()
+    }
+
+    private fun SetupUiState.recompute(): SetupUiState {
+        val p1Match = parent1Password.isNotEmpty() && parent1Password == parent1Confirm
+        val p2Match = parent2Password.isNotEmpty() && parent2Password == parent2Confirm
+        return copy(
+            parent1PasswordsMatch = p1Match,
+            parent1CanLock = parent1Name.isNotBlank() && p1Match,
+            parent2PasswordsMatch = p2Match,
+            parent2CanLock = parent2Name.isNotBlank() && p2Match,
+            canCreate = parent1Locked && (soloMode || parent2Locked),
+        )
     }
 
     private fun createSession() {

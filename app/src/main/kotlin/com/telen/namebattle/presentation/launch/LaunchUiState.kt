@@ -10,7 +10,5 @@ data class LaunchUiState(
     val targetFinalists: Int = 0,
     val roundsEstimate: Int = 0,
     val isStarting: Boolean = false,
-) {
-    val canStart: Boolean
-        get() = parent1Count > 0 && (parent2Name == null || parent2Count > 0)
-}
+    val canStart: Boolean = false,
+)

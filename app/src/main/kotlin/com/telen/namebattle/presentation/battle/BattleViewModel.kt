@@ -53,14 +53,15 @@ class BattleViewModel(
     }
 
     private fun renderCurrent(state: BattleState) {
-        val duel = state.currentDuel ?: return
-        val progress = if (state.totalDuelsInRound == 0) 0f
-        else state.currentDuelIndex.toFloat() / state.totalDuelsInRound
+        val currentRound = state.rounds.getOrNull(state.currentRoundIndex) ?: return
+        val duel = currentRound.duels.getOrNull(state.currentDuelIndex) ?: return
+        val totalDuels = currentRound.duels.size
+        val progress = if (totalDuels == 0) 0f else state.currentDuelIndex.toFloat() / totalDuels
         _state.update { s ->
             val base = s.copy(
                 isLoading = false,
-                roundNumber = state.currentRoundNumber,
-                position = state.duelPositionLabel,
+                roundNumber = currentRound.roundNumber,
+                position = "${state.currentDuelIndex + 1}/$totalDuels",
                 progress = progress,
                 duelKey = s.duelKey + 1,
                 summary = null,
@@ -103,7 +104,7 @@ class BattleViewModel(
 
     private fun showSummary(state: BattleState, finishedRoundIndex: Int) {
         val finished = state.rounds[finishedRoundIndex]
-        val survivors = finished.winners.map { nameOf(it) }
+        val survivors = finished.duels.mapNotNull { it.winnerId }.map { nameOf(it) }
         val eliminated = finished.duels.mapNotNull { d ->
             val w = d.winnerId
             if (d.firstName2Id == null || w == null) null
@@ -112,7 +113,7 @@ class BattleViewModel(
                 nameOf(loser)
             }
         }
-        val next = state.currentRound
+        val next = state.rounds.getOrNull(state.currentRoundIndex)
         val nextDuels = next?.duels?.count { it.firstName2Id != null } ?: 0
         val nextHasAuto = next?.duels?.any { it.firstName2Id == null } ?: false
         _state.update {
@@ -120,7 +121,7 @@ class BattleViewModel(
                 mode = BattleMode.ROUND_SUMMARY,
                 summary = RoundSummary(
                     finishedRound = finished.roundNumber,
-                    nextRound = state.currentRoundNumber,
+                    nextRound = next?.roundNumber ?: 1,
                     survivors = survivors,
                     eliminated = eliminated,
                     nextDuels = nextDuels,

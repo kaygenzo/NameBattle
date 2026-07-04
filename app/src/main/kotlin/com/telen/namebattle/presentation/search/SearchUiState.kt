@@ -24,11 +24,7 @@ data class SearchUiState(
     val results: List<NameRow> = emptyList(),
     val shortlist: List<NameRow> = emptyList(),
     val shortlistCount: Int = 0,
+    val subtitle: String = "",
     val detail: FirstName? = null,
     val isValidating: Boolean = false,
-) {
-    val letters: List<Char> get() = ('A'..'Z').toList()
-    val topYears: List<Int> get() = listOf(1900, 1980, 2000, 2010)
-    val subtitle: String
-        get() = parentName + " · " + shortlistCount + if (shortlistCount > 1) " prénoms" else " prénom"
-}
+)
