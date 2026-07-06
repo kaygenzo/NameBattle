@@ -1,3 +1,6 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -36,6 +39,12 @@ val generateDevKeystore by tasks.registering {
     }
 }
 
+val keystoreProperties = Properties()
+keystoreProperties.setProperty("storeFile", "../telen.release.jks")
+keystoreProperties.setProperty("storePassword", System.getenv("KEYSTORE_PASSWORD").orEmpty())
+keystoreProperties.setProperty("keyAlias", System.getenv("KEY_ALIAS").orEmpty())
+keystoreProperties.setProperty("keyPassword", System.getenv("KEY_PASSWORD").orEmpty())
+
 android {
     namespace = "com.telen.namebattle"
     compileSdk = 37
@@ -56,6 +65,13 @@ android {
             keyAlias = devKeyAlias
             keyPassword = devKeyPassword
         }
+
+        create("release") {
+            storeFile = file(keystoreProperties.getProperty("storeFile"))
+            storePassword = keystoreProperties.getProperty("storePassword")
+            keyAlias = keystoreProperties.getProperty("keyAlias")
+            keyPassword = keystoreProperties.getProperty("keyPassword")
+        }
     }
 
     buildTypes {
@@ -66,19 +82,26 @@ android {
         }
         release {
             isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("dev")
+            signingConfig = signingConfigs.getByName("release")
         }
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_21
-        targetCompatibility = JavaVersion.VERSION_21
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     buildFeatures { compose = true }
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget.set(JvmTarget.JVM_17)
+    }
 }
 
 tasks.named("preBuild") {
