@@ -11,9 +11,13 @@ import com.telen.namebattle.domain.usecase.battle.GetBattleStateUseCase
 import com.telen.namebattle.domain.usecase.export.ExportBattleReportUseCase
 import com.telen.namebattle.domain.usecase.firstname.GetNamesByIdsUseCase
 import com.telen.namebattle.domain.usecase.session.GetSessionUseCase
+import java.io.File
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -143,6 +147,54 @@ class ResultsViewModelTest {
         assertFalse(state.isLoading)
         assertTrue(state.finalists.isEmpty())
         assertEquals(0, state.roundsPlayed)
+    }
+
+    // ── onExportPdf ───────────────────────────────────────────────────────────
+
+    @Test
+    fun `onExportPdf calls export use case and resets isExporting`() = runTest {
+        coEvery { getSession(sessionId) } returns null
+        coEvery { exportBattleReport(sessionId) } returns mockk<File>()
+        val vm = makeViewModel()
+        advanceUntilIdle()
+
+        vm.onExportPdf()
+        // Allow the real IO dispatcher to complete before asserting
+        Thread.sleep(100)
+        advanceUntilIdle()
+
+        coVerify(exactly = 1) { exportBattleReport(sessionId) }
+        assertFalse(vm.state.value.isExporting)
+    }
+
+    @Test
+    fun `onExportPdf does not call use case when already exporting`() = runTest {
+        coEvery { getSession(sessionId) } returns null
+        coEvery { exportBattleReport(sessionId) } returns mockk<File>()
+        val vm = makeViewModel()
+        advanceUntilIdle()
+
+        vm.onExportPdf()
+        vm.onExportPdf()
+        Thread.sleep(100)
+        advanceUntilIdle()
+
+        coVerify(exactly = 1) { exportBattleReport(sessionId) }
+    }
+
+    @Test
+    fun `onExportPdf sends SharePdf effect for non-null result`() = runTest {
+        coEvery { getSession(sessionId) } returns null
+        val fakeFile = mockk<File>()
+        coEvery { exportBattleReport(sessionId) } returns fakeFile
+        val vm = makeViewModel()
+        advanceUntilIdle()
+
+        vm.onExportPdf()
+        Thread.sleep(100)
+
+        val effect = vm.effects.first() as? ResultsEffect.SharePdf
+        assertEquals(fakeFile, effect?.file)
     }
 
     @Test

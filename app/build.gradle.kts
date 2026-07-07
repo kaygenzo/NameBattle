@@ -163,6 +163,13 @@ val coverageExcludes = listOf(
     "**/*_Impl*",
     "**/*Dao_Impl*",
     "**/BuildConfig*",
+    // Android infrastructure — require Android runtime, no business logic
+    "**/AppPreferences*",
+    "**/NameBattleDatabase*",
+    "**/dao/**",
+    "**/entity/**",
+    // PDF rendering — uses android.graphics APIs, not testable in JVM unit tests
+    "**/export/**",
 )
 
 tasks.register<JacocoReport>("jacocoUnitTestReport") {
