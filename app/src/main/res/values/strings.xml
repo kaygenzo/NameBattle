@@ -110,6 +110,19 @@
     <string name="cd_remove">Retirer</string>
     <string name="cd_add">Ajouter</string>
 
+    <!-- Export PDF -->
+    <string name="btn_export_pdf">📄  Exporter en PDF</string>
+    <string name="btn_export_pdf_generating">Génération…</string>
+    <string name="share_pdf_chooser_title">Partager le rapport</string>
+    <string name="pdf_header_tagline">~ notre petite histoire ~</string>
+    <string name="pdf_header_title">Le grand tournoi des prénoms</string>
+    <string name="pdf_header_title_continued">Le grand tournoi des prénoms (suite)</string>
+    <string name="pdf_round_label">Étape %d</string>
+    <string name="pdf_auto_qualified">(qualifié d\'office)</string>
+    <string name="pdf_winner_chosen">%s a été choisi</string>
+    <string name="pdf_footer_label">PrénomBattle — synthèse de bataille</string>
+    <string name="pdf_page_number">Page %d</string>
+
     <!-- Name detail sheet -->
     <string name="label_popularity">Popularité</string>
     <string name="label_peak">Pic</string>

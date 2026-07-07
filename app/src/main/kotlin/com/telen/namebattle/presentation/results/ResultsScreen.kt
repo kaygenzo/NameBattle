@@ -1,5 +1,6 @@
 package com.telen.namebattle.presentation.results
 
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,15 +20,18 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.telen.namebattle.R
 import com.telen.namebattle.presentation.components.NbCard
@@ -45,7 +49,37 @@ fun ResultsScreen(
     viewModel: ResultsViewModel = koinViewModel { parametersOf(sessionId) },
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    ResultsScreenContent(state = state, onNewSession = onNewSession, onReplay = onReplay)
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.effects.collect { effect ->
+            when (effect) {
+                is ResultsEffect.SharePdf -> {
+                    val uri = FileProvider.getUriForFile(
+                        context, "${context.packageName}.fileprovider", effect.file
+                    )
+                    val intent = Intent(Intent.ACTION_SEND).apply {
+                        type = "application/pdf"
+                        putExtra(Intent.EXTRA_STREAM, uri)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                    context.startActivity(
+                        Intent.createChooser(
+                            intent,
+                            context.getString(R.string.share_pdf_chooser_title)
+                        )
+                    )
+                }
+            }
+        }
+    }
+
+    ResultsScreenContent(
+        state = state,
+        onNewSession = onNewSession,
+        onReplay = onReplay,
+        onExportPdf = viewModel::onExportPdf,
+    )
 }
 
 @Composable
@@ -53,6 +87,7 @@ internal fun ResultsScreenContent(
     state: ResultsUiState,
     onNewSession: () -> Unit = {},
     onReplay: () -> Unit = {},
+    onExportPdf: () -> Unit = {},
 ) {
     val c = NbTheme.colors
     val rounds = maxOf(state.roundsPlayed, 1)
@@ -122,6 +157,17 @@ internal fun ResultsScreenContent(
             }
 
             Spacer(Modifier.height(16.dp))
+            SecondaryButton(
+                text = stringResource(
+                    if (state.isExporting) {
+                        R.string.btn_export_pdf_generating
+                    } else {
+                        R.string.btn_export_pdf
+                    }
+                ),
+                onClick = onExportPdf,
+            )
+            Spacer(Modifier.height(8.dp))
             PrimaryButton(stringResource(R.string.btn_replay), onClick = onReplay)
             Spacer(Modifier.height(8.dp))
             SecondaryButton(stringResource(R.string.btn_back_to_home), onClick = onNewSession)

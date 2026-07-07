@@ -19,4 +19,5 @@ data class HomeUiState(
     val isLoading: Boolean = true,
     val sessions: List<SessionSummary> = emptyList(),
     val pendingDeleteSessionId: Long? = null,
+    val isExportingSessionId: Long? = null,
 )

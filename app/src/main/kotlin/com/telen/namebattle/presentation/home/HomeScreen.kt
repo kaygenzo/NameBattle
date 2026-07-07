@@ -1,5 +1,6 @@
 package com.telen.namebattle.presentation.home
 
+import android.content.Intent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -38,11 +39,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.content.FileProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.telen.namebattle.R
 import com.telen.namebattle.domain.model.Gender
@@ -62,11 +65,23 @@ fun HomeScreen(
     viewModel: HomeViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
-        viewModel.events.collect { effect ->
-            when (effect) {
+        viewModel.events.collect { event ->
+            when (event) {
                 HomeUiEvent.NavigateToSetup -> onCreateSession()
+                is HomeUiEvent.SharePdf -> {
+                    val uri = FileProvider.getUriForFile(
+                        context, "${context.packageName}.fileprovider", event.file
+                    )
+                    val intent = Intent(Intent.ACTION_SEND).apply {
+                        type = "application/pdf"
+                        putExtra(Intent.EXTRA_STREAM, uri)
+                        addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                    }
+                    context.startActivity(Intent.createChooser(intent, context.getString(R.string.share_pdf_chooser_title)))
+                }
             }
         }
     }
@@ -88,6 +103,7 @@ fun HomeScreen(
         onResumeBattle = onResumeBattle,
         onViewResults = onViewResults,
         onRestartBattle = { sessionId -> viewModel.onRestartBattle(sessionId) { onLaunchBattle(sessionId) } },
+        onExportPdf = viewModel::onExportPdf,
         onDeleteSession = viewModel::onDeleteSession,
         onDeleteConfirmed = viewModel::onDeleteConfirmed,
         onDeleteDismissed = viewModel::onDeleteDismissed,
@@ -103,6 +119,7 @@ internal fun HomeScreenContent(
     onResumeBattle: (sessionId: Long) -> Unit,
     onViewResults: (sessionId: Long) -> Unit,
     onRestartBattle: (sessionId: Long) -> Unit,
+    onExportPdf: (sessionId: Long) -> Unit = {},
     onDeleteSession: (sessionId: Long) -> Unit,
     onDeleteConfirmed: () -> Unit,
     onDeleteDismissed: () -> Unit,
@@ -157,10 +174,12 @@ internal fun HomeScreenContent(
                 state.sessions.forEach { summary ->
                     SessionCard(
                         summary = summary,
+                        isExporting = state.isExportingSessionId == summary.sessionId,
                         onStartBattle = { onStartBattle(summary.sessionId) },
                         onResumeBattle = { onResumeBattle(summary.sessionId) },
                         onViewResults = { onViewResults(summary.sessionId) },
                         onRestartBattle = { onRestartBattle(summary.sessionId) },
+                        onExportPdf = { onExportPdf(summary.sessionId) },
                         onManage = { onManageLists(summary.sessionId) },
                         onDelete = { onDeleteSession(summary.sessionId) },
                         modifier = Modifier.widthIn(max = 420.dp),
@@ -196,10 +215,12 @@ private val GenderGirl = Color(0xFFFF79C6)
 @Composable
 private fun SessionCard(
     summary: SessionSummary,
+    isExporting: Boolean,
     onStartBattle: () -> Unit,
     onResumeBattle: () -> Unit,
     onViewResults: () -> Unit,
     onRestartBattle: () -> Unit,
+    onExportPdf: () -> Unit,
     onManage: () -> Unit,
     onDelete: () -> Unit,
     modifier: Modifier = Modifier,
@@ -278,6 +299,17 @@ private fun SessionCard(
                     }
                     BattleStatus.COMPLETED -> {
                         PrimaryButton(stringResource(R.string.btn_view_results), onClick = onViewResults)
+                        Spacer(Modifier.height(8.dp))
+                        SecondaryButton(
+                            text = stringResource(
+                                if (isExporting) {
+                                    R.string.btn_export_pdf_generating
+                                } else {
+                                    R.string.btn_export_pdf
+                                }
+                            ),
+                            onClick = onExportPdf,
+                        )
                         Spacer(Modifier.height(8.dp))
                         SecondaryButton(stringResource(R.string.btn_restart_battle), onClick = onRestartBattle)
                     }

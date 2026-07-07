@@ -18,6 +18,7 @@ val viewModelModule = module {
             getShortlistIds = get(),
             getBattleState = get(),
             clearBattleState = get(),
+            exportBattleReport = get(),
             seeder = get(),
         )
     }
@@ -78,6 +79,7 @@ val viewModelModule = module {
             getSession = get(),
             getBattleState = get(),
             getNamesByIds = get(),
+            exportBattleReport = get(),
         )
     }
 }

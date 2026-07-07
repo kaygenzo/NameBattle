@@ -3,6 +3,7 @@ package com.telen.namebattle.presentation.home
 import com.telen.namebattle.data.local.DatabaseSeeder
 import com.telen.namebattle.domain.usecase.battle.ClearBattleStateUseCase
 import com.telen.namebattle.domain.usecase.battle.GetBattleStateUseCase
+import com.telen.namebattle.domain.usecase.export.ExportBattleReportUseCase
 import com.telen.namebattle.domain.usecase.firstname.GetShortlistIdsUseCase
 import com.telen.namebattle.domain.usecase.session.DeleteSessionUseCase
 import com.telen.namebattle.domain.usecase.session.GetAllSessionsUseCase
@@ -13,6 +14,7 @@ import io.mockk.coEvery
 import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.mockk
+import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -40,6 +42,7 @@ class HomeViewModelTest {
     private lateinit var getShortlistIds: GetShortlistIdsUseCase
     private lateinit var getBattleState: GetBattleStateUseCase
     private lateinit var clearBattleState: ClearBattleStateUseCase
+    private lateinit var exportBattleReport: ExportBattleReportUseCase
     private lateinit var seeder: DatabaseSeeder
 
     @Before
@@ -50,6 +53,7 @@ class HomeViewModelTest {
         getShortlistIds = mockk()
         getBattleState = mockk()
         clearBattleState = mockk()
+        exportBattleReport = mockk(relaxed = true)
         seeder = mockk(relaxed = true)
     }
 
@@ -64,6 +68,7 @@ class HomeViewModelTest {
         getShortlistIds = getShortlistIds,
         getBattleState = getBattleState,
         clearBattleState = clearBattleState,
+        exportBattleReport = exportBattleReport,
         seeder = seeder,
     )
 
@@ -231,6 +236,47 @@ class HomeViewModelTest {
         val state = vm.state.first()
         assertTrue(state.sessions.none { it.sessionId == 5L })
         assertNull(state.pendingDeleteSessionId)
+    }
+
+    @Test
+    fun `onExportPdf sets isExportingSessionId then clears it and emits SharePdf event`() =
+        runTest {
+            // given
+            coEvery { getAllSessions() } returns emptyList()
+            val fakeFile = mockk<File>()
+            coEvery { exportBattleReport(42L) } returns fakeFile
+            val vm = createViewModel()
+            advanceUntilIdle()
+
+            val events = mutableListOf<HomeUiEvent>()
+            val job = launch { vm.events.collect { events.add(it) } }
+
+            // when
+            vm.onExportPdf(42L)
+            advanceUntilIdle()
+
+            // then
+            val shareEvent = events.filterIsInstance<HomeUiEvent.SharePdf>().firstOrNull()
+            assertEquals(fakeFile, shareEvent?.file)
+            assertEquals(null, vm.state.value.isExportingSessionId)
+            job.cancel()
+        }
+
+    @Test
+    fun `onExportPdf does nothing when another export is already running`() = runTest {
+        // given
+        coEvery { getAllSessions() } returns emptyList()
+        coEvery { exportBattleReport(any()) } returns mockk()
+        val vm = createViewModel()
+        advanceUntilIdle()
+
+        vm.onExportPdf(1L)
+        // second call while first might still be in progress
+        vm.onExportPdf(2L)
+        advanceUntilIdle()
+
+        // only one export should have run
+        coVerify(exactly = 1) { exportBattleReport(any()) }
     }
 
     @Test

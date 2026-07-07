@@ -2,6 +2,7 @@ package com.telen.namebattle
 
 import android.app.Application
 import com.telen.namebattle.di.databaseModule
+import com.telen.namebattle.di.exportModule
 import com.telen.namebattle.di.repositoryModule
 import com.telen.namebattle.di.useCaseModule
 import com.telen.namebattle.di.viewModelModule
@@ -22,6 +23,7 @@ class NameBattleApp : Application() {
                 databaseModule,
                 repositoryModule,
                 useCaseModule,
+                exportModule,
                 viewModelModule,
             )
         }

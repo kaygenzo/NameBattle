@@ -6,9 +6,11 @@ import com.telen.namebattle.data.local.DatabaseSeeder
 import com.telen.namebattle.domain.model.Gender
 import com.telen.namebattle.domain.usecase.battle.ClearBattleStateUseCase
 import com.telen.namebattle.domain.usecase.battle.GetBattleStateUseCase
+import com.telen.namebattle.domain.usecase.export.ExportBattleReportUseCase
 import com.telen.namebattle.domain.usecase.firstname.GetShortlistIdsUseCase
 import com.telen.namebattle.domain.usecase.session.DeleteSessionUseCase
 import com.telen.namebattle.domain.usecase.session.GetAllSessionsUseCase
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,9 +18,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 
 sealed interface HomeUiEvent {
     data object NavigateToSetup : HomeUiEvent
+    data class SharePdf(val file: File) : HomeUiEvent
 }
 
 class HomeViewModel(
@@ -27,6 +32,7 @@ class HomeViewModel(
     private val getShortlistIds: GetShortlistIdsUseCase,
     private val getBattleState: GetBattleStateUseCase,
     private val clearBattleState: ClearBattleStateUseCase,
+    private val exportBattleReport: ExportBattleReportUseCase,
     private val seeder: DatabaseSeeder,
 ) : ViewModel() {
 
@@ -109,6 +115,16 @@ class HomeViewModel(
                 })
             }
             onDone()
+        }
+    }
+
+    fun onExportPdf(sessionId: Long) {
+        if (_state.value.isExportingSessionId != null) return
+        viewModelScope.launch {
+            _state.update { it.copy(isExportingSessionId = sessionId) }
+            val file = withContext(Dispatchers.IO) { exportBattleReport(sessionId) }
+            _state.update { it.copy(isExportingSessionId = null) }
+            if (file != null) _events.send(HomeUiEvent.SharePdf(file))
         }
     }
 }

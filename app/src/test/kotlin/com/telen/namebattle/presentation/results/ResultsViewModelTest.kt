@@ -8,6 +8,7 @@ import com.telen.namebattle.domain.model.Gender
 import com.telen.namebattle.domain.model.Parent
 import com.telen.namebattle.domain.model.Session
 import com.telen.namebattle.domain.usecase.battle.GetBattleStateUseCase
+import com.telen.namebattle.domain.usecase.export.ExportBattleReportUseCase
 import com.telen.namebattle.domain.usecase.firstname.GetNamesByIdsUseCase
 import com.telen.namebattle.domain.usecase.session.GetSessionUseCase
 import io.mockk.coEvery
@@ -32,6 +33,7 @@ class ResultsViewModelTest {
     private val getSession = mockk<GetSessionUseCase>()
     private val getBattleState = mockk<GetBattleStateUseCase>()
     private val getNamesByIds = mockk<GetNamesByIdsUseCase>()
+    private val exportBattleReport = mockk<ExportBattleReportUseCase>(relaxed = true)
 
     private val sessionId = 1L
 
@@ -71,7 +73,13 @@ class ResultsViewModelTest {
         )
     }
 
-    private fun makeViewModel() = ResultsViewModel(sessionId, getSession, getBattleState, getNamesByIds)
+    private fun makeViewModel() = ResultsViewModel(
+        sessionId = sessionId,
+        getSession = getSession,
+        getBattleState = getBattleState,
+        getNamesByIds = getNamesByIds,
+        exportBattleReport = exportBattleReport
+    )
 
     @Test
     fun `load populates finalists with resolved names`() = runTest {
