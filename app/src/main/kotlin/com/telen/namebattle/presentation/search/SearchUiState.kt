@@ -24,7 +24,6 @@ data class SearchUiState(
     val results: List<NameRow> = emptyList(),
     val shortlist: List<NameRow> = emptyList(),
     val shortlistCount: Int = 0,
-    val subtitle: String = "",
     val detail: FirstName? = null,
     val isValidating: Boolean = false,
 )

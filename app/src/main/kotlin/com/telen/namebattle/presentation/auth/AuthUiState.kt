@@ -1,5 +1,7 @@
 package com.telen.namebattle.presentation.auth
 
+import androidx.annotation.StringRes
+
 data class ParentOption(
     val parentIndex: Int,
     val name: String,
@@ -14,6 +16,6 @@ data class AuthUiState(
     val selectedParentIndex: Int? = null,
     val password: String = "",
     val isChecking: Boolean = false,
-    val error: String? = null,
+    @StringRes val errorRes: Int? = null,
     val canStartBattle: Boolean = false,
 )

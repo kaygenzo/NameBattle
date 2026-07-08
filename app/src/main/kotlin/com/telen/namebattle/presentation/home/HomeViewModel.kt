@@ -3,7 +3,6 @@ package com.telen.namebattle.presentation.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.telen.namebattle.data.local.DatabaseSeeder
-import com.telen.namebattle.domain.model.Gender
 import com.telen.namebattle.domain.usecase.battle.ClearBattleStateUseCase
 import com.telen.namebattle.domain.usecase.battle.GetBattleStateUseCase
 import com.telen.namebattle.domain.usecase.export.ExportBattleReportUseCase
@@ -68,10 +67,6 @@ class HomeViewModel(
                 SessionSummary(
                     sessionId = session.id,
                     parentNames = parents.joinToString(" & ") { it.name },
-                    genderLabel = when (session.gender) {
-                        Gender.BOY -> "Garçon"
-                        Gender.GIRL -> "Fille"
-                    },
                     gender = session.gender,
                     totalNames = counts.sum(),
                     allListsValidated = parents.all { it.listValidated },

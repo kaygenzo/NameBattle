@@ -2,6 +2,7 @@ package com.telen.namebattle.presentation.auth
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
+import com.telen.namebattle.R
 import com.telen.namebattle.presentation.theme.NameBattleTheme
 
 private val twoParents = listOf(
@@ -76,7 +77,7 @@ private fun AuthErrorDark() {
                 totalNames = 12,
                 selectedParentIndex = 0,
                 password = "mauvais",
-                error = "Mot de passe incorrect",
+                errorRes = R.string.error_wrong_password,
             )
         )
     }

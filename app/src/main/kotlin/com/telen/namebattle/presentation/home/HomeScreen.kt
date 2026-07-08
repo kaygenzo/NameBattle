@@ -263,7 +263,14 @@ private fun SessionCard(
                         )
                         Text(
                             buildString {
-                                append(summary.genderLabel)
+                                append(
+                                    stringResource(
+                                        when (summary.gender) {
+                                            Gender.BOY -> R.string.label_gender_boy
+                                            Gender.GIRL -> R.string.label_gender_girl
+                                        }
+                                    )
+                                )
                                 append(" · ")
                                 append(summary.totalNames)
                                 append(" ")

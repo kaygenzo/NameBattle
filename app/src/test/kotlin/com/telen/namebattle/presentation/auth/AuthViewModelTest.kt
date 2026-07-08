@@ -1,5 +1,6 @@
 package com.telen.namebattle.presentation.auth
 
+import com.telen.namebattle.R
 import com.telen.namebattle.domain.usecase.auth.AuthenticateParentUseCase
 import com.telen.namebattle.domain.usecase.firstname.GetShortlistIdsUseCase
 import com.telen.namebattle.domain.usecase.session.GetParentUseCase
@@ -102,7 +103,7 @@ class AuthViewModelTest {
         val state = vm.state.first()
         assertEquals(0, state.selectedParentIndex)
         assertEquals("", state.password)
-        assertNull(state.error)
+        assertNull(state.errorRes)
     }
 
     @Test
@@ -127,7 +128,7 @@ class AuthViewModelTest {
         // then
         val state = vm.state.first()
         assertEquals("newpass", state.password)
-        assertNull(state.error)
+        assertNull(state.errorRes)
     }
 
     @Test
@@ -213,7 +214,7 @@ class AuthViewModelTest {
 
         // then
         val state = vm.state.first()
-        assertEquals("Mot de passe incorrect", state.error)
+        assertEquals(R.string.error_wrong_password, state.errorRes)
         assertFalse(state.isChecking)
     }
 
@@ -259,7 +260,7 @@ class AuthViewModelTest {
         val state = vm.state.first()
         assertNull(state.selectedParentIndex)
         assertEquals("", state.password)
-        assertNull(state.error)
+        assertNull(state.errorRes)
         assertFalse(state.isChecking)
     }
 }

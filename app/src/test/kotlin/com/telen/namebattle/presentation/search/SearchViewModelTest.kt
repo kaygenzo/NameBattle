@@ -345,13 +345,14 @@ class SearchViewModelTest {
     }
 
     @Test
-    fun `subtitle reflects shortlist count`() = runTest {
+    fun `parentName and shortlistCount reflect loaded data`() = runTest {
         // given
         setupDefaults()
         val vm = makeViewModel()
         advanceUntilIdle()
 
-        // then — default state: 0 prénoms, subtitle starts with parent name
-        assertTrue(vm.state.value.subtitle.startsWith("Alice"))
+        // then
+        assertEquals("Alice", vm.state.value.parentName)
+        assertEquals(0, vm.state.value.shortlistCount)
     }
 }

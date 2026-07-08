@@ -110,6 +110,9 @@
     <string name="cd_remove">Retirer</string>
     <string name="cd_add">Ajouter</string>
 
+    <!-- Auth errors -->
+    <string name="error_wrong_password">Mot de passe incorrect</string>
+
     <!-- Export PDF -->
     <string name="btn_export_pdf">📄  Exporter en PDF</string>
     <string name="btn_export_pdf_generating">Génération…</string>
@@ -122,6 +125,9 @@
     <string name="pdf_winner_chosen">%s a été choisi</string>
     <string name="pdf_footer_label">PrénomBattle — synthèse de bataille</string>
     <string name="pdf_page_number">Page %d</string>
+    <string name="pdf_heart_separator">♥</string>
+    <string name="pdf_dot_separator">·</string>
+    <string name="pdf_finalist_decoration">✿</string>
 
     <!-- Name detail sheet -->
     <string name="label_popularity">Popularité</string>

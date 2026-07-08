@@ -2,6 +2,7 @@ package com.telen.namebattle.presentation.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.telen.namebattle.R
 import com.telen.namebattle.domain.usecase.auth.AuthenticateParentUseCase
 import com.telen.namebattle.domain.usecase.firstname.GetShortlistIdsUseCase
 import com.telen.namebattle.domain.usecase.session.GetParentUseCase
@@ -69,28 +70,30 @@ class AuthViewModel(
 
     fun resetSelection() {
         _state.update {
-            it.copy(selectedParentIndex = null, password = "", error = null, isChecking = false)
+            it.copy(selectedParentIndex = null, password = "", errorRes = null, isChecking = false)
         }
         load()
     }
 
     fun onSelectParent(parentIndex: Int) {
-        _state.update { it.copy(selectedParentIndex = parentIndex, password = "", error = null) }
+        _state.update { it.copy(selectedParentIndex = parentIndex, password = "", errorRes = null) }
     }
 
-    fun onPasswordChange(v: String) = _state.update { it.copy(password = v, error = null) }
+    fun onPasswordChange(v: String) = _state.update { it.copy(password = v, errorRes = null) }
 
     fun submit() {
         val s = _state.value
         val idx = s.selectedParentIndex ?: return
         if (s.password.isBlank() || s.isChecking) return
-        _state.update { it.copy(isChecking = true, error = null) }
+        _state.update { it.copy(isChecking = true, errorRes = null) }
         viewModelScope.launch {
             val ok = authenticate(sessionId, idx, s.password)
             if (ok) {
                 _events.send(AuthUiEvent.Authenticated(idx))
             } else {
-                _state.update { it.copy(isChecking = false, error = "Mot de passe incorrect") }
+                _state.update {
+                    it.copy(isChecking = false, errorRes = R.string.error_wrong_password)
+                }
             }
         }
     }

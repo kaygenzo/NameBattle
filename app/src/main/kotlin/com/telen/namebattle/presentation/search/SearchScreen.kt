@@ -44,6 +44,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.pluralStringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.telen.namebattle.presentation.components.PrimaryButton
 import com.telen.namebattle.presentation.components.SegmentedTabs
@@ -124,7 +125,13 @@ internal fun SearchScreenContent(
                         style = MaterialTheme.typography.headlineSmall, color = c.textHi,
                     )
                     Text(
-                        state.subtitle,
+                        "${state.parentName} · ${
+                            pluralStringResource(
+                                R.plurals.label_total_prenoms,
+                                state.shortlistCount,
+                                state.shortlistCount,
+                            )
+                        }",
                         style = MaterialTheme.typography.bodySmall,
                         color = c.textLo
                     )

@@ -140,11 +140,15 @@ internal fun AuthScreenContent(
                             onValueChange = onPasswordChange,
                             label = stringResource(R.string.label_password),
                             isPassword = true,
-                            isError = state.error != null,
+                            isError = state.errorRes != null,
                         )
-                        state.error?.let {
+                        state.errorRes?.let {
                             Spacer(Modifier.height(6.dp))
-                            Text(it, style = MaterialTheme.typography.bodySmall, color = c.danger)
+                            Text(
+                                stringResource(it),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = c.danger,
+                            )
                         }
                         Spacer(Modifier.height(16.dp))
                         PrimaryButton(

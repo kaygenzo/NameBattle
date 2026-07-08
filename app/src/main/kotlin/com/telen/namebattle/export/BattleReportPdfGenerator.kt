@@ -84,7 +84,8 @@ class BattleReportPdfGenerator(private val context: Context) {
     private fun drawMainHeader() {
         val p1 = session.parent1.name
         val p2 = session.parent2?.name
-        val names = if (p2 != null) "$p1 ♥ $p2" else p1
+        val sep = context.getString(R.string.pdf_heart_separator)
+        val names = if (p2 != null) "$p1 $sep $p2" else p1
 
         canvas.drawText(
             context.getString(R.string.pdf_header_tagline), pageW / 2f, y,
@@ -145,9 +146,10 @@ class BattleReportPdfGenerator(private val context: Context) {
             val n1 = namesById[duel.firstName1Id] ?: "?"
             val n2 = duel.firstName2Id?.let { namesById[it] }
             val winner = duel.winnerId?.let { namesById[it] } ?: "?"
+            val dot = context.getString(R.string.pdf_dot_separator)
             val label =
                 if (n2 != null) {
-                    "$n1  ·  $n2"
+                    "$n1  $dot  $n2"
                 } else {
                     "$n1 ${context.getString(R.string.pdf_auto_qualified)}"
                 }
@@ -174,8 +176,11 @@ class BattleReportPdfGenerator(private val context: Context) {
         canvas.drawRoundRect(
             RectF(left, y, right, y + 28f), 10f, 10f,
             Paint(Paint.ANTI_ALIAS_FLAG).apply { color = finalBg })
+        val deco = context.getString(R.string.pdf_finalist_decoration)
+        val dotSep = context.getString(R.string.pdf_dot_separator)
         canvas.drawText(
-            "✿ " + finalistNames.joinToString("  ·  ") + " ✿", pageW / 2f, y + 18f,
+            "$deco " + finalistNames.joinToString("  $dotSep  ") + " $deco",
+            pageW / 2f, y + 18f,
             Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 color = terracotta; typeface = serifBold; textSize = 13f; textAlign =
                 Paint.Align.CENTER

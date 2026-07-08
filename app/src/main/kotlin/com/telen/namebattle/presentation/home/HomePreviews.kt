@@ -9,7 +9,6 @@ private val previewSessions = listOf(
     SessionSummary(
         sessionId = 1L,
         parentNames = "Sofia & Thomas",
-        genderLabel = "Garçon",
         gender = Gender.BOY,
         totalNames = 12,
         allListsValidated = true,
@@ -19,7 +18,6 @@ private val previewSessions = listOf(
     SessionSummary(
         sessionId = 2L,
         parentNames = "Marie",
-        genderLabel = "Fille",
         gender = Gender.GIRL,
         totalNames = 7,
         allListsValidated = true,
@@ -29,7 +27,6 @@ private val previewSessions = listOf(
     SessionSummary(
         sessionId = 3L,
         parentNames = "Lucie & Marc",
-        genderLabel = "Fille",
         gender = Gender.GIRL,
         totalNames = 9,
         allListsValidated = true,
