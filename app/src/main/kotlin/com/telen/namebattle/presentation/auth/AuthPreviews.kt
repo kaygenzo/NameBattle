@@ -9,7 +9,12 @@ private val twoParents = listOf(
     ParentOption(parentIndex = 1, name = "Thomas", shortlistCount = 4, listValidated = false),
 )
 
-@Preview(name = "Auth – Sélection – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Auth – Sélection – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun AuthSelectionDark() {
     NameBattleTheme {
@@ -19,7 +24,12 @@ private fun AuthSelectionDark() {
     }
 }
 
-@Preview(name = "Auth – Sélection – Light", showBackground = true, backgroundColor = 0xFFF5F5FA, showSystemUi = true)
+@Preview(
+    name = "Auth – Sélection – Light",
+    showBackground = true,
+    backgroundColor = 0xFFF5F5FA,
+    showSystemUi = true,
+)
 @Composable
 private fun AuthSelectionLight() {
     NameBattleTheme {
@@ -29,7 +39,12 @@ private fun AuthSelectionLight() {
     }
 }
 
-@Preview(name = "Auth – Parent sélectionné – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Auth – Parent sélectionné – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun AuthParentSelectedDark() {
     NameBattleTheme {
@@ -45,7 +60,12 @@ private fun AuthParentSelectedDark() {
     }
 }
 
-@Preview(name = "Auth – Erreur mot de passe – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Auth – Erreur mot de passe – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun AuthErrorDark() {
     NameBattleTheme {
@@ -62,7 +82,12 @@ private fun AuthErrorDark() {
     }
 }
 
-@Preview(name = "Auth – Bouton lancer bataille – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Auth – Bouton lancer bataille – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun AuthCanLaunchDark() {
     NameBattleTheme {
@@ -79,7 +104,12 @@ private fun AuthCanLaunchDark() {
     }
 }
 
-@Preview(name = "Auth – Solo parent – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Auth – Solo parent – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun AuthSoloDark() {
     NameBattleTheme {

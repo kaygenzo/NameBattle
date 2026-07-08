@@ -101,7 +101,8 @@ class StartBattleUseCaseTest {
     }
 
     @Test(expected = IllegalArgumentException::class)
-    fun `throws IllegalArgumentException when combined shortlist has fewer than 2 names`() = runTest {
+    fun `throws IllegalArgumentException when combined shortlist has fewer than 2 names`()
+    = runTest {
         // given
         val parent1 = buildParent(id = 1L, parentIndex = 0)
         val session = buildSession(id = 1L, parent1 = parent1, parent2 = null)
@@ -119,7 +120,8 @@ class StartBattleUseCaseTest {
         // given
         val parent1 = buildParent(id = 1L, parentIndex = 0)
         val session = buildSession(id = 1L, parent1 = parent1, parent2 = null)
-        coEvery { sessionRepository.getShortlistIds(parentId = 1L) } returns listOf(1L, 2L, 3L, 4L, 5L, 6L)
+        coEvery { sessionRepository.getShortlistIds(parentId = 1L) } returns
+            listOf(1L, 2L, 3L, 4L, 5L, 6L)
         coEvery { battleRepository.saveBattleState(any()) } returns Unit
 
         // when

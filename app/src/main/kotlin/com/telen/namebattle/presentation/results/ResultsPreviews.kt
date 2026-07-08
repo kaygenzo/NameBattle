@@ -4,7 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.telen.namebattle.presentation.theme.NameBattleTheme
 
-@Preview(name = "Results – 4 finalistes – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Results – 4 finalistes – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun ResultsFourFinalistsDark() {
     NameBattleTheme {
@@ -18,7 +23,12 @@ private fun ResultsFourFinalistsDark() {
     }
 }
 
-@Preview(name = "Results – 4 finalistes – Light", showBackground = true, backgroundColor = 0xFFF5F5FA, showSystemUi = true)
+@Preview(
+    name = "Results – 4 finalistes – Light",
+    showBackground = true,
+    backgroundColor = 0xFFF5F5FA,
+    showSystemUi = true,
+)
 @Composable
 private fun ResultsFourFinalistsLight() {
     NameBattleTheme {
@@ -32,7 +42,12 @@ private fun ResultsFourFinalistsLight() {
     }
 }
 
-@Preview(name = "Results – 3 finalistes – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Results – 3 finalistes – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun ResultsThreeFinalistsDark() {
     NameBattleTheme {

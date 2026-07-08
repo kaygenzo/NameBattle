@@ -22,12 +22,16 @@ class AddNameToShortlistUseCaseTest {
     @Test
     fun `delegates to repo addNameToShortlist with the given parentId and firstNameId`() = runTest {
         // given
-        coEvery { sessionRepository.addNameToShortlist(parentId = 1L, firstNameId = 10L) } returns Unit
+        coEvery {
+            sessionRepository.addNameToShortlist(parentId = 1L, firstNameId = 10L)
+        } returns Unit
 
         // when
         useCase(parentId = 1L, firstNameId = 10L)
 
         // then
-        coVerify(exactly = 1) { sessionRepository.addNameToShortlist(parentId = 1L, firstNameId = 10L) }
+        coVerify(exactly = 1) {
+            sessionRepository.addNameToShortlist(parentId = 1L, firstNameId = 10L)
+        }
     }
 }

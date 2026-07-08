@@ -38,7 +38,9 @@ class SessionRepositoryImplTest {
     fun `createSession inserts session and parent1 only in solo mode`() = runTest {
         // given
         val sessionEntity = SessionEntity(id = 1L, gender = "BOY", createdAt = 0L)
-        val parent1Entity = ParentEntity(id = 10L, sessionId = 1L, name = "Alice", passwordHash = "hash1", parentIndex = 0)
+        val parent1Entity = ParentEntity(
+            id = 10L, sessionId = 1L, name = "Alice", passwordHash = "hash1", parentIndex = 0
+        )
         coEvery { dao.insertSession(any()) } returns 1L
         coEvery { dao.insertParent(any()) } returns 10L
         coEvery { dao.getSessionById(1L) } returns sessionEntity
@@ -55,8 +57,12 @@ class SessionRepositoryImplTest {
     fun `createSession inserts session and both parents in duo mode`() = runTest {
         // given
         val sessionEntity = SessionEntity(id = 1L, gender = "GIRL", createdAt = 0L)
-        val parent1Entity = ParentEntity(id = 10L, sessionId = 1L, name = "Alice", passwordHash = "hash1", parentIndex = 0)
-        val parent2Entity = ParentEntity(id = 11L, sessionId = 1L, name = "Bob", passwordHash = "hash2", parentIndex = 1)
+        val parent1Entity = ParentEntity(
+            id = 10L, sessionId = 1L, name = "Alice", passwordHash = "hash1", parentIndex = 0
+        )
+        val parent2Entity = ParentEntity(
+            id = 11L, sessionId = 1L, name = "Bob", passwordHash = "hash2", parentIndex = 1
+        )
         coEvery { dao.insertSession(any()) } returns 1L
         coEvery { dao.insertParent(any()) } returns 10L andThen 11L
         coEvery { dao.getSessionById(1L) } returns sessionEntity
@@ -73,7 +79,9 @@ class SessionRepositoryImplTest {
     fun `createSession returns session with correct gender`() = runTest {
         // given
         val sessionEntity = SessionEntity(id = 1L, gender = "GIRL", createdAt = 1000L)
-        val parent1Entity = ParentEntity(id = 10L, sessionId = 1L, name = "Alice", passwordHash = "hash1", parentIndex = 0)
+        val parent1Entity = ParentEntity(
+            id = 10L, sessionId = 1L, name = "Alice", passwordHash = "hash1", parentIndex = 0
+        )
         coEvery { dao.insertSession(any()) } returns 1L
         coEvery { dao.insertParent(any()) } returns 10L
         coEvery { dao.getSessionById(1L) } returns sessionEntity
@@ -106,8 +114,12 @@ class SessionRepositoryImplTest {
     fun `getAllSessions returns sessions with parent2`() = runTest {
         // given
         val sessionEntity = SessionEntity(id = 1L, gender = "BOY", createdAt = 0L)
-        val parent1Entity = ParentEntity(id = 10L, sessionId = 1L, name = "Alice", passwordHash = "hash1", parentIndex = 0)
-        val parent2Entity = ParentEntity(id = 11L, sessionId = 1L, name = "Bob", passwordHash = "hash2", parentIndex = 1)
+        val parent1Entity = ParentEntity(
+            id = 10L, sessionId = 1L, name = "Alice", passwordHash = "hash1", parentIndex = 0
+        )
+        val parent2Entity = ParentEntity(
+            id = 11L, sessionId = 1L, name = "Bob", passwordHash = "hash2", parentIndex = 1
+        )
         coEvery { dao.getAllSessions() } returns listOf(sessionEntity)
         coEvery { dao.getParentsBySession(1L) } returns listOf(parent1Entity, parent2Entity)
 

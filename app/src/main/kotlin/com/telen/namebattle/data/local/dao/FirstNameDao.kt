@@ -99,10 +99,22 @@ interface FirstNameDao {
     @Query("SELECT COUNT(*) FROM first_names")
     suspend fun count(): Int
 
-    @Query("UPDATE first_names SET meaning = :meaning, origin = :origin, has_meaning = 1 WHERE id = :id")
+    @Query(
+        """
+        UPDATE first_names
+        SET meaning = :meaning, origin = :origin, has_meaning = 1
+        WHERE id = :id
+        """
+    )
     suspend fun updateMeaning(id: Long, meaning: String, origin: String?)
 
-    @Query("UPDATE first_names SET meaning = :meaning, origin = :origin, has_meaning = 1 WHERE name_lower = LOWER(:nameRaw) AND is_custom = 0")
+    @Query(
+        """
+        UPDATE first_names
+        SET meaning = :meaning, origin = :origin, has_meaning = 1
+        WHERE name_lower = LOWER(:nameRaw) AND is_custom = 0
+        """
+    )
     suspend fun updateMeaningByName(nameRaw: String, meaning: String, origin: String?)
 
     @Query("SELECT UPPER(name) FROM first_names WHERE has_meaning = 1 AND is_custom = 0")

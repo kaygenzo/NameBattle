@@ -58,9 +58,16 @@ class SessionRepositoryImpl(private val dao: SessionDao) : SessionRepository {
     override suspend fun getAllSessions(): List<Session> {
         return dao.getAllSessions().mapNotNull { entity ->
             val parents = dao.getParentsBySession(entity.id)
-            val p1 = parents.firstOrNull { it.parentIndex == 0 }?.toDomain() ?: return@mapNotNull null
+            val p1 = parents.firstOrNull { it.parentIndex == 0 }?.toDomain()
+                ?: return@mapNotNull null
             val p2 = parents.firstOrNull { it.parentIndex == 1 }?.toDomain()
-            Session(id = entity.id, gender = entity.gender(), parent1 = p1, parent2 = p2, createdAt = entity.createdAt)
+            Session(
+                id = entity.id,
+                gender = entity.gender(),
+                parent1 = p1,
+                parent2 = p2,
+                createdAt = entity.createdAt,
+            )
         }
     }
 
@@ -69,7 +76,13 @@ class SessionRepositoryImpl(private val dao: SessionDao) : SessionRepository {
         val parents = dao.getParentsBySession(entity.id)
         val p1 = parents.firstOrNull { it.parentIndex == 0 }?.toDomain() ?: return null
         val p2 = parents.firstOrNull { it.parentIndex == 1 }?.toDomain()
-        return Session(id = entity.id, gender = entity.gender(), parent1 = p1, parent2 = p2, createdAt = entity.createdAt)
+        return Session(
+            id = entity.id,
+            gender = entity.gender(),
+            parent1 = p1,
+            parent2 = p2,
+            createdAt = entity.createdAt,
+        )
     }
 
     override suspend fun deleteSession(sessionId: Long) = dao.deleteSession(sessionId)

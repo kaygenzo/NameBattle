@@ -25,7 +25,9 @@ class GetNamesByIdsUseCaseTest {
     fun `delegates to repo getByIds and returns the result`() = runTest {
         // given
         val ids = listOf(1L, 2L, 3L)
-        val expectedNames = listOf(buildFirstName(id = 1L), buildFirstName(id = 2L), buildFirstName(id = 3L))
+        val expectedNames = listOf(
+            buildFirstName(id = 1L), buildFirstName(id = 2L), buildFirstName(id = 3L)
+        )
         coEvery { firstNameRepository.getByIds(ids = ids) } returns expectedNames
 
         // when

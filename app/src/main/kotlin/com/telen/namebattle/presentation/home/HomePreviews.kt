@@ -53,25 +53,45 @@ private fun homeContent(state: HomeUiState) = @Composable {
     )
 }
 
-@Preview(name = "Home – Sessions (not started / in progress / completed) – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Home – Sessions (not started / in progress / completed) – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun HomeWithSessionsDark() {
     NameBattleTheme { homeContent(HomeUiState(isLoading = false, sessions = previewSessions))() }
 }
 
-@Preview(name = "Home – Sessions – Light", showBackground = true, backgroundColor = 0xFFF5F5FA, showSystemUi = true)
+@Preview(
+    name = "Home – Sessions – Light",
+    showBackground = true,
+    backgroundColor = 0xFFF5F5FA,
+    showSystemUi = true,
+)
 @Composable
 private fun HomeWithSessionsLight() {
     NameBattleTheme { homeContent(HomeUiState(isLoading = false, sessions = previewSessions))() }
 }
 
-@Preview(name = "Home – Vide – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Home – Vide – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun HomeEmptyDark() {
     NameBattleTheme { homeContent(HomeUiState(isLoading = false, sessions = emptyList()))() }
 }
 
-@Preview(name = "Home – Loading – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Home – Loading – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun HomeLoadingDark() {
     NameBattleTheme { homeContent(HomeUiState(isLoading = true))() }

@@ -111,7 +111,8 @@ class HomeViewModel(
             clearBattleState(sessionId)
             _state.update { s ->
                 s.copy(sessions = s.sessions.map {
-                    if (it.sessionId == sessionId) it.copy(battleStatus = BattleStatus.NOT_STARTED) else it
+                    if (it.sessionId == sessionId) it.copy(battleStatus = BattleStatus.NOT_STARTED)
+                    else it
                 })
             }
             onDone()

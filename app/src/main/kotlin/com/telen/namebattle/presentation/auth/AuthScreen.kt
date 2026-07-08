@@ -148,7 +148,11 @@ internal fun AuthScreenContent(
                         }
                         Spacer(Modifier.height(16.dp))
                         PrimaryButton(
-                            text = if (state.isChecking) stringResource(R.string.btn_checking) else stringResource(R.string.btn_sign_in),
+                            text = if (state.isChecking) {
+                                stringResource(R.string.btn_checking)
+                            } else {
+                                stringResource(R.string.btn_sign_in)
+                            },
                             onClick = onSubmit,
                             enabled = state.password.isNotBlank() && !state.isChecking,
                         )
@@ -224,7 +228,9 @@ private fun ParentCard(
                     append(parent.shortlistCount)
                     append(" ")
                     append(prenomLabel)
-                    if (parent.listValidated) append(" ${stringResource(R.string.label_list_validated)}")
+                    if (parent.listValidated) {
+                        append(" ${stringResource(R.string.label_list_validated)}")
+                    }
                 },
                 style = MaterialTheme.typography.bodySmall,
                 color = c.textLo,

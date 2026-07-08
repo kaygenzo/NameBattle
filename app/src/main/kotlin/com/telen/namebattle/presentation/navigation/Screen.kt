@@ -5,7 +5,8 @@ sealed class Screen(val route: String) {
     object Setup : Screen("setup")
 
     data class Auth(val sessionId: Long) : Screen("auth/${sessionId}")
-    data class Search(val sessionId: Long, val parentIndex: Int) : Screen("search/${sessionId}/${parentIndex}")
+    data class Search(val sessionId: Long, val parentIndex: Int) :
+        Screen("search/${sessionId}/${parentIndex}")
     data class Launch(val sessionId: Long) : Screen("launch/${sessionId}")
     data class Battle(val sessionId: Long) : Screen("battle/${sessionId}")
     data class Results(val sessionId: Long) : Screen("results/${sessionId}")

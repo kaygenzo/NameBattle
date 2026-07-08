@@ -20,7 +20,12 @@ private val sampleShortlist = listOf(
     NameRow(7L, "Léa", inList = true, hasMeaning = false),
 )
 
-@Preview(name = "Search – A→Z – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Search – A→Z – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun SearchAZDark() {
     NameBattleTheme {
@@ -38,7 +43,12 @@ private fun SearchAZDark() {
     }
 }
 
-@Preview(name = "Search – A→Z – Light", showBackground = true, backgroundColor = 0xFFF5F5FA, showSystemUi = true)
+@Preview(
+    name = "Search – A→Z – Light",
+    showBackground = true,
+    backgroundColor = 0xFFF5F5FA,
+    showSystemUi = true,
+)
 @Composable
 private fun SearchAZLight() {
     NameBattleTheme {
@@ -56,7 +66,12 @@ private fun SearchAZLight() {
     }
 }
 
-@Preview(name = "Search – Top 100 – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Search – Top 100 – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun SearchTop100Dark() {
     NameBattleTheme {
@@ -74,7 +89,12 @@ private fun SearchTop100Dark() {
     }
 }
 
-@Preview(name = "Search – Libre – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Search – Libre – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun SearchFreeDark() {
     NameBattleTheme {
@@ -92,7 +112,12 @@ private fun SearchFreeDark() {
     }
 }
 
-@Preview(name = "Search – Ma liste – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Search – Ma liste – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun SearchMyListDark() {
     NameBattleTheme {
@@ -108,7 +133,12 @@ private fun SearchMyListDark() {
     }
 }
 
-@Preview(name = "Search – Ma liste vide – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Search – Ma liste vide – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun SearchMyListEmptyDark() {
     NameBattleTheme {
@@ -141,7 +171,8 @@ private fun NameDetailSheetDark() {
                 peakYear = 1988,
                 firstYear = 1950,
                 origin = "Grec",
-                meaning = "Du grec « helios » (soleil) et « doron » (don) — « don du soleil ».",
+                meaning = "Du grec « helios » (soleil) et « doron » (don)" +
+                    " — « don du soleil ».",
                 hasMeaning = true,
             ),
             onAdd = {}

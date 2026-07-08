@@ -28,13 +28,17 @@ class SearchFreeTextUseCaseTest {
     fun `delegates to repo searchFreeText and returns the flow`() = runTest {
         // given
         val expectedNames = listOf(buildFirstName(id = 1L, name = "Emma"))
-        every { firstNameRepository.searchFreeText(query = "em", gender = Gender.GIRL) } returns flowOf(expectedNames)
+        every {
+            firstNameRepository.searchFreeText(query = "em", gender = Gender.GIRL)
+        } returns flowOf(expectedNames)
 
         // when
         val result = useCase(query = "em", gender = Gender.GIRL).first()
 
         // then
         assertEquals(expectedNames, result)
-        verify(exactly = 1) { firstNameRepository.searchFreeText(query = "em", gender = Gender.GIRL) }
+        verify(exactly = 1) {
+            firstNameRepository.searchFreeText(query = "em", gender = Gender.GIRL)
+        }
     }
 }

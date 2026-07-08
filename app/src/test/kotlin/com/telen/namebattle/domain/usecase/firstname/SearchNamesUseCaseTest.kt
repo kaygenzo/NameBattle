@@ -28,13 +28,17 @@ class SearchNamesUseCaseTest {
     fun `delegates to repo searchByFirstLetter and returns the flow`() = runTest {
         // given
         val expectedNames = listOf(buildFirstName(id = 1L, name = "Alice"))
-        every { firstNameRepository.searchByFirstLetter(letter = 'A', gender = Gender.GIRL) } returns flowOf(expectedNames)
+        every {
+            firstNameRepository.searchByFirstLetter(letter = 'A', gender = Gender.GIRL)
+        } returns flowOf(expectedNames)
 
         // when
         val result = useCase(letter = 'A', gender = Gender.GIRL).first()
 
         // then
         assertEquals(expectedNames, result)
-        verify(exactly = 1) { firstNameRepository.searchByFirstLetter(letter = 'A', gender = Gender.GIRL) }
+        verify(exactly = 1) {
+            firstNameRepository.searchByFirstLetter(letter = 'A', gender = Gender.GIRL)
+        }
     }
 }

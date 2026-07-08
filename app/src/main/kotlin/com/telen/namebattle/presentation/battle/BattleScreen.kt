@@ -74,7 +74,11 @@ fun BattleScreen(
         viewModel.events.collect { if (it is BattleUiEvent.Complete) onBattleComplete() }
     }
 
-    BattleScreenContent(state = state, onChoose = viewModel::choose, onContinue = viewModel::continueAfterSummary)
+    BattleScreenContent(
+        state = state,
+        onChoose = viewModel::choose,
+        onContinue = viewModel::continueAfterSummary,
+    )
 }
 
 @Composable
@@ -93,7 +97,10 @@ internal fun BattleScreenContent(
         ) {
             Spacer(Modifier.height(16.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Pill(stringResource(R.string.label_round_n, state.roundNumber), tone = PillTone.WARNING)
+                Pill(
+                    stringResource(R.string.label_round_n, state.roundNumber),
+                    tone = PillTone.WARNING,
+                )
                 Spacer(Modifier.width(9.dp))
                 Box(
                     Modifier
@@ -376,9 +383,7 @@ private fun DuelCard(
     }
 }
 
-// ─────────────────────────────────────────────────────────────────────────────
-// Auto-pass & round summary
-// ─────────────────────────────────────────────────────────────────────────────
+// ── Auto-pass & round summary ─────────────────────────────────────────────────
 
 @Composable
 private fun AutoPassView(state: BattleUiState, onChoose: (Long) -> Unit) {
@@ -397,7 +402,12 @@ private fun AutoPassView(state: BattleUiState, onChoose: (Long) -> Unit) {
                     .background(c.success)
                     .padding(horizontal = 10.dp, vertical = 3.dp)
             ) {
-                Text(stringResource(R.string.label_auto_qualified), color = c.page, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    stringResource(R.string.label_auto_qualified),
+                    color = c.page,
+                    fontSize = 10.sp,
+                    fontWeight = FontWeight.Bold,
+                )
             }
             Spacer(Modifier.height(12.dp))
             Text(state.autoName, fontSize = 30.sp, fontWeight = FontWeight.Bold, color = c.textHi)
@@ -417,30 +427,52 @@ private fun AutoPassView(state: BattleUiState, onChoose: (Long) -> Unit) {
 @Composable
 private fun RoundSummaryView(s: RoundSummary, onContinue: () -> Unit) {
     val c = NbTheme.colors
-    val survivorsLabel = pluralStringResource(R.plurals.label_survivors, s.survivors.size, s.survivors.size)
-    val eliminatedLabel = pluralStringResource(R.plurals.label_eliminated_count, s.eliminated.size, s.eliminated.size)
+    val survivorsLabel = pluralStringResource(
+        R.plurals.label_survivors, s.survivors.size, s.survivors.size
+    )
+    val eliminatedLabel = pluralStringResource(
+        R.plurals.label_eliminated_count, s.eliminated.size, s.eliminated.size
+    )
 
     Column(Modifier.fillMaxWidth()) {
         Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-            Pill(stringResource(R.string.label_round_done, s.finishedRound), tone = PillTone.WARNING)
+            Pill(
+                stringResource(R.string.label_round_done, s.finishedRound),
+                tone = PillTone.WARNING,
+            )
             Spacer(Modifier.height(13.dp))
             Text(survivorsLabel, fontSize = 22.sp, fontWeight = FontWeight.Bold, color = c.textHi)
-            Text(eliminatedLabel, style = MaterialTheme.typography.bodySmall, color = c.textLo)
+            Text(
+                eliminatedLabel,
+                style = MaterialTheme.typography.bodySmall,
+                color = c.textLo,
+            )
         }
         Spacer(Modifier.height(18.dp))
-        Text(stringResource(R.string.label_advance_to_round, s.nextRound), style = MaterialTheme.typography.titleMedium, color = c.textMid)
+        Text(
+            stringResource(R.string.label_advance_to_round, s.nextRound),
+            style = MaterialTheme.typography.titleMedium,
+            color = c.textMid,
+        )
         Spacer(Modifier.height(8.dp))
         FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             s.survivors.forEach { ChipTag(it, c.success, c.successBg, c.successBorder) }
         }
         Spacer(Modifier.height(16.dp))
-        Text(stringResource(R.string.label_eliminated_section), style = MaterialTheme.typography.titleMedium, color = c.textMid)
+        Text(
+            stringResource(R.string.label_eliminated_section),
+            style = MaterialTheme.typography.titleMedium,
+            color = c.textMid,
+        )
         Spacer(Modifier.height(8.dp))
         FlowRow(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
             s.eliminated.forEach { StrikeTag(it) }
         }
         Spacer(Modifier.height(20.dp))
-        PrimaryButton(stringResource(R.string.btn_start_next_round, s.nextRound), onClick = onContinue)
+        PrimaryButton(
+            stringResource(R.string.btn_start_next_round, s.nextRound),
+            onClick = onContinue,
+        )
     }
 }
 

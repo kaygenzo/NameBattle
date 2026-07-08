@@ -65,7 +65,11 @@ class ResultsViewModelTest {
     )
 
     private fun battleState(finalists: List<Long>, roundCount: Int = 2): BattleState {
-        val duel = DuelState(firstName1Id = finalists.firstOrNull() ?: 1L, firstName2Id = null, winnerId = finalists.firstOrNull())
+        val duel = DuelState(
+            firstName1Id = finalists.firstOrNull() ?: 1L,
+            firstName2Id = null,
+            winnerId = finalists.firstOrNull(),
+        )
         val rounds = (1..roundCount).map { BattleRound(roundNumber = it, duels = listOf(duel)) }
         return BattleState(
             sessionId = sessionId,
@@ -90,7 +94,9 @@ class ResultsViewModelTest {
         // given
         coEvery { getSession(sessionId) } returns session()
         coEvery { getBattleState(sessionId) } returns battleState(finalists = listOf(10L, 20L))
-        coEvery { getNamesByIds(listOf(10L, 20L)) } returns listOf(firstName(10L, "Emma"), firstName(20L, "Leo"))
+        coEvery { getNamesByIds(listOf(10L, 20L)) } returns listOf(
+            firstName(10L, "Emma"), firstName(20L, "Leo")
+        )
 
         // when
         val vm = makeViewModel()
@@ -106,7 +112,8 @@ class ResultsViewModelTest {
     fun `load sets roundsPlayed from battle rounds size`() = runTest {
         // given
         coEvery { getSession(sessionId) } returns session()
-        coEvery { getBattleState(sessionId) } returns battleState(finalists = listOf(10L), roundCount = 3)
+        coEvery { getBattleState(sessionId) } returns
+            battleState(finalists = listOf(10L), roundCount = 3)
         coEvery { getNamesByIds(any()) } returns listOf(firstName(10L, "Emma"))
 
         // when

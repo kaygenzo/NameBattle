@@ -47,7 +47,8 @@ class LaunchViewModel(
             val c2 = session.parent2?.let { getShortlistIds(it.id).size } ?: 0
             val total = c1 + c2
             val target = 4
-            val rounds = if (total > target) ceil(log2(total.toDouble() / target)).toInt() + 1 else 1
+            val rounds =
+                if (total > target) ceil(log2(total.toDouble() / target)).toInt() + 1 else 1
             _state.update {
                 it.copy(
                     isLoading = false,

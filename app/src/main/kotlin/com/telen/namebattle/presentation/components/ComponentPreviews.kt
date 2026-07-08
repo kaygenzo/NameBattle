@@ -87,7 +87,10 @@ private fun NbTextFieldPreviewDark() {
             NbDivider()
             NbTextField("", onValueChange = {}, label = "Mot de passe", isPassword = true)
             NbDivider()
-            NbTextField("abc", onValueChange = {}, label = "Confirmer", isPassword = true, isError = true)
+            NbTextField(
+                "abc", onValueChange = {}, label = "Confirmer",
+                isPassword = true, isError = true,
+            )
         }
     }
 }

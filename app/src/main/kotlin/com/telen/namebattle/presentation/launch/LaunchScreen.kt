@@ -140,14 +140,18 @@ internal fun LaunchScreenContent(
                         color = c.textMid
                     )
                     Text(
-                        pluralStringResource(R.plurals.label_total_prenoms, state.total, state.total),
+                        pluralStringResource(
+                        R.plurals.label_total_prenoms, state.total, state.total
+                    ),
                         fontSize = 20.sp, fontWeight = FontWeight.Bold, color = c.textHi,
                     )
                 }
             }
             Spacer(Modifier.height(8.dp))
             Text(
-                stringResource(R.string.label_objective, state.targetFinalists, state.roundsEstimate),
+                stringResource(
+                    R.string.label_objective, state.targetFinalists, state.roundsEstimate
+                ),
                 style = MaterialTheme.typography.bodySmall,
                 color = c.textLo,
                 textAlign = TextAlign.Center,
@@ -175,7 +179,11 @@ internal fun LaunchScreenContent(
 
             Spacer(Modifier.height(16.dp))
             PrimaryButton(
-                text = if (state.isStarting) stringResource(R.string.btn_preparing) else stringResource(R.string.btn_launch_battle),
+                text = if (state.isStarting) {
+                    stringResource(R.string.btn_preparing)
+                } else {
+                    stringResource(R.string.btn_launch_battle)
+                },
                 onClick = onStart,
                 enabled = state.canStart && !state.isStarting,
             )

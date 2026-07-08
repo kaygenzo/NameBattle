@@ -68,7 +68,11 @@ fun NameDetailContent(
 
         if (name.totalBirths > 0 || name.peakYear > 0) {
             Spacer(Modifier.height(18.dp))
-            Text(stringResource(R.string.label_popularity), style = MaterialTheme.typography.titleMedium, color = c.textMid)
+            Text(
+                stringResource(R.string.label_popularity),
+                style = MaterialTheme.typography.titleMedium,
+                color = c.textMid,
+            )
             Spacer(Modifier.height(9.dp))
             Row(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -79,7 +83,11 @@ fun NameDetailContent(
                     name.peakYear.takeIf { it > 0 }?.toString() ?: "—",
                     Modifier.weight(1f)
                 )
-                StatTileBox(stringResource(R.string.label_births), formatThousands(name.totalBirths), Modifier.weight(1f))
+                StatTileBox(
+                    stringResource(R.string.label_births),
+                    formatThousands(name.totalBirths),
+                    Modifier.weight(1f),
+                )
                 StatTileBox(
                     stringResource(R.string.label_since),
                     name.firstYear.takeIf { it > 0 }?.toString() ?: "—",

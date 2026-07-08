@@ -26,7 +26,9 @@ class AuthenticateParentUseCaseTest {
     @Test
     fun `returns false when parent not found`() = runTest {
         // given
-        coEvery { sessionRepository.getParentBySession(sessionId = 1L, parentIndex = 0) } returns null
+        coEvery {
+            sessionRepository.getParentBySession(sessionId = 1L, parentIndex = 0)
+        } returns null
 
         // when
         val result = useCase(sessionId = 1L, parentIndex = 0, password = "secret")
@@ -37,10 +39,13 @@ class AuthenticateParentUseCaseTest {
     }
 
     @Test
-    fun `returns false when password is incorrect and does not call markParentAuthenticated`() = runTest {
+    fun `returns false when password is incorrect and does not call markParentAuthenticated`()
+    = runTest {
         // given
         val parent = buildParent(id = 1L, passwordHash = "correctpassword".sha256())
-        coEvery { sessionRepository.getParentBySession(sessionId = 1L, parentIndex = 0) } returns parent
+        coEvery {
+            sessionRepository.getParentBySession(sessionId = 1L, parentIndex = 0)
+        } returns parent
 
         // when
         val result = useCase(sessionId = 1L, parentIndex = 0, password = "wrongpassword")
@@ -51,11 +56,14 @@ class AuthenticateParentUseCaseTest {
     }
 
     @Test
-    fun `returns true when password is correct and calls markParentAuthenticated with parent id`() = runTest {
+    fun `returns true when password is correct and calls markParentAuthenticated with parent id`()
+    = runTest {
         // given
         val correctPassword = "mySecret"
         val parent = buildParent(id = 42L, passwordHash = correctPassword.sha256())
-        coEvery { sessionRepository.getParentBySession(sessionId = 1L, parentIndex = 0) } returns parent
+        coEvery {
+            sessionRepository.getParentBySession(sessionId = 1L, parentIndex = 0)
+        } returns parent
         coEvery { sessionRepository.markParentAuthenticated(parentId = 42L) } returns Unit
 
         // when

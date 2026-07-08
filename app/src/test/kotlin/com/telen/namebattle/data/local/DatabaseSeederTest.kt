@@ -96,7 +96,8 @@ class DatabaseSeederTest {
     @Test
     fun `seedIfNeeded seeds meanings from asset when not yet seeded`() = runTest {
         coEvery { prefs.isMeaningsSeeded() } returns false
-        every { assetManager.open("meanings.json") } returns meaningsJson.toByteArray().inputStream()
+        every { assetManager.open("meanings.json") } returns
+            meaningsJson.toByteArray().inputStream()
 
         seeder.seedIfNeeded()
 
@@ -107,7 +108,8 @@ class DatabaseSeederTest {
     @Test
     fun `seedIfNeeded passes correct entries to dao`() = runTest {
         coEvery { prefs.isMeaningsSeeded() } returns false
-        every { assetManager.open("meanings.json") } returns meaningsJson.toByteArray().inputStream()
+        every { assetManager.open("meanings.json") } returns
+            meaningsJson.toByteArray().inputStream()
 
         val captured = mutableListOf<List<MeaningUpdate>>()
         coEvery { dao.updateMeaningsBatch(capture(captured)) } returns Unit
@@ -115,9 +117,15 @@ class DatabaseSeederTest {
         seeder.seedIfNeeded()
 
         val entries = captured.flatten()
-        assert(entries.any { it.nameRaw == "Emma" && it.meaning == "Universal" && it.origin == "Germanic" })
-        assert(entries.any { it.nameRaw == "Liam" && it.meaning == "Strong-willed warrior" && it.origin == "Irish" })
-        assert(entries.any { it.nameRaw == "Noname" && it.meaning == "Without origin" && it.origin == null })
+        assert(entries.any {
+            it.nameRaw == "Emma" && it.meaning == "Universal" && it.origin == "Germanic"
+        })
+        assert(entries.any {
+            it.nameRaw == "Liam" && it.meaning == "Strong-willed warrior" && it.origin == "Irish"
+        })
+        assert(entries.any {
+            it.nameRaw == "Noname" && it.meaning == "Without origin" && it.origin == null
+        })
     }
 
     // ── seedNames ─────────────────────────────────────────────────────────────

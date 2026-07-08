@@ -13,7 +13,8 @@ class StartBattleUseCase(
 ) {
     suspend operator fun invoke(session: Session): BattleState {
         val p1Ids = sessionRepo.getShortlistIds(session.parent1.id).toSet()
-        val p2Ids = session.parent2?.let { sessionRepo.getShortlistIds(it.id).toSet() } ?: emptySet()
+        val p2Ids = session.parent2?.let { sessionRepo.getShortlistIds(it.id).toSet() }
+            ?: emptySet()
         val allIds = (p1Ids + p2Ids).toList()
         require(allIds.size >= 2) { "Need at least 2 prénoms" }
         val shuffled = allIds.shuffled()

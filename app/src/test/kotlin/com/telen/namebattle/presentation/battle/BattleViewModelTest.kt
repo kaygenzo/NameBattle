@@ -74,7 +74,9 @@ class BattleViewModelTest {
         // given
         val state = duelBattleState(id1 = 10L, id2 = 20L)
         coEvery { getBattleState(sessionId) } returns state
-        coEvery { getNamesByIds(any()) } returns listOf(firstName(10L, "Emma"), firstName(20L, "Alice"))
+        coEvery { getNamesByIds(any()) } returns listOf(
+            firstName(10L, "Emma"), firstName(20L, "Alice")
+        )
 
         // when
         val vm = makeViewModel()
@@ -111,9 +113,13 @@ class BattleViewModelTest {
     fun `choose emits Complete event when battle is complete`() = runTest {
         // given
         val initial = duelBattleState(id1 = 10L, id2 = 20L)
-        val completed = duelBattleState(id1 = 10L, id2 = 20L, complete = true, finalists = listOf(10L))
+        val completed = duelBattleState(
+            id1 = 10L, id2 = 20L, complete = true, finalists = listOf(10L)
+        )
         coEvery { getBattleState(sessionId) } returns initial
-        coEvery { getNamesByIds(any()) } returns listOf(firstName(10L, "Emma"), firstName(20L, "Alice"))
+        coEvery { getNamesByIds(any()) } returns listOf(
+            firstName(10L, "Emma"), firstName(20L, "Alice")
+        )
         coEvery { chooseWinner(sessionId, 10L) } returns completed
 
         val vm = makeViewModel()
@@ -307,7 +313,9 @@ class BattleViewModelTest {
         val afterAuto = BattleState(
             sessionId = sessionId, initialCount = 3, targetFinalists = 3,
             rounds = listOf(
-                round1.copy(duels = listOf(normalDuel.copy(winnerId = 10L), autoDuel.copy(winnerId = 30L))),
+                round1.copy(duels = listOf(
+                    normalDuel.copy(winnerId = 10L), autoDuel.copy(winnerId = 30L)
+                )),
                 round2
             ),
             currentRoundIndex = 1, currentDuelIndex = 0

@@ -11,7 +11,7 @@ import com.telen.namebattle.data.local.entity.ShortlistEntryEntity
 @Dao
 interface SessionDao {
 
-    // ── Sessions ──────────────────────────────────────────────────
+    // ── Sessions ─────────────────────────────────────────────────────────────
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSession(session: SessionEntity): Long
 
@@ -27,7 +27,7 @@ interface SessionDao {
     @Query("UPDATE sessions SET battle_state_json = :json WHERE id = :sessionId")
     suspend fun updateBattleState(sessionId: Long, json: String?)
 
-    // ── Parents ───────────────────────────────────────────────────
+    // ── Parents ──────────────────────────────────────────────────────────────
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertParent(parent: ParentEntity): Long
 
@@ -46,11 +46,13 @@ interface SessionDao {
     @Query("UPDATE parents SET list_validated = 0 WHERE id = :parentId")
     suspend fun invalidateList(parentId: Long)
 
-    // ── FirstName list entries ────────────────────────────────────────
+    // ── FirstName list entries ────────────────────────────────────────────────
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun addNameToShortlist(entry: ShortlistEntryEntity)
 
-    @Query("DELETE FROM shortlist_entries WHERE parent_id = :parentId AND first_name_id = :firstNameId")
+    @Query(
+        "DELETE FROM shortlist_entries WHERE parent_id = :parentId AND first_name_id = :firstNameId"
+    )
     suspend fun removeNameFromShortlist(parentId: Long, firstNameId: Long)
 
     @Query("SELECT first_name_id FROM shortlist_entries WHERE parent_id = :parentId")
@@ -59,6 +61,11 @@ interface SessionDao {
     @Query("SELECT first_name_id FROM shortlist_entries WHERE parent_id = :parentId")
     fun getShortlistIdsFlow(parentId: Long): kotlinx.coroutines.flow.Flow<List<Long>>
 
-    @Query("SELECT COUNT(*) FROM shortlist_entries WHERE parent_id = :parentId AND first_name_id = :firstNameId")
+    @Query(
+        """
+        SELECT COUNT(*) FROM shortlist_entries
+        WHERE parent_id = :parentId AND first_name_id = :firstNameId
+        """
+    )
     suspend fun isInList(parentId: Long, firstNameId: Long): Int
 }

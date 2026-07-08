@@ -30,5 +30,6 @@ data class FirstNameEntity(
     @ColumnInfo(name = "origin") val origin: String? = null,   // etymology, from Firebase
     @ColumnInfo(name = "meaning") val meaning: String? = null,
     @ColumnInfo(name = "has_meaning") val hasMeaning: Boolean = false,
-    @ColumnInfo(name = "is_custom") val isCustom: Boolean = false   // user-typed free spelling, hidden from search/top
+    // user-typed free spelling, hidden from search/top
+    @ColumnInfo(name = "is_custom") val isCustom: Boolean = false
 )

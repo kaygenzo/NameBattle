@@ -73,7 +73,8 @@ class HomeViewModelTest {
     )
 
     @Test
-    fun `load populates sessions with correct battle status NOT_STARTED when no battle state`() = runTest {
+    fun `load populates sessions with correct battle status NOT_STARTED when no battle state`()
+    = runTest {
         // given
         val session = buildSession(id = 1L)
         coEvery { getAllSessions() } returns listOf(session)

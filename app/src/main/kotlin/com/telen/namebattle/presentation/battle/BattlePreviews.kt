@@ -4,7 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.telen.namebattle.presentation.theme.NameBattleTheme
 
-@Preview(name = "Battle – Duel – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Battle – Duel – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun BattleDuelDark() {
     NameBattleTheme {
@@ -23,7 +28,12 @@ private fun BattleDuelDark() {
     }
 }
 
-@Preview(name = "Battle – Duel – Light", showBackground = true, backgroundColor = 0xFFF5F5FA, showSystemUi = true)
+@Preview(
+    name = "Battle – Duel – Light",
+    showBackground = true,
+    backgroundColor = 0xFFF5F5FA,
+    showSystemUi = true,
+)
 @Composable
 private fun BattleDuelLight() {
     NameBattleTheme {
@@ -42,7 +52,12 @@ private fun BattleDuelLight() {
     }
 }
 
-@Preview(name = "Battle – Auto-qualifié – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Battle – Auto-qualifié – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun BattleAutoPassDark() {
     NameBattleTheme {
@@ -60,7 +75,12 @@ private fun BattleAutoPassDark() {
     }
 }
 
-@Preview(name = "Battle – Résumé de round – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Battle – Résumé de round – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun BattleRoundSummaryDark() {
     NameBattleTheme {

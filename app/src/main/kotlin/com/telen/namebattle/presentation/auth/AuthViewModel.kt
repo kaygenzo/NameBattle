@@ -56,12 +56,21 @@ class AuthViewModel(
             }
             val total = options.sumOf { it.shortlistCount }
             val canStart = options.isNotEmpty() && options.all { it.shortlistCount > 0 }
-            _state.update { it.copy(isLoading = false, parents = options, totalNames = total, canStartBattle = canStart) }
+            _state.update {
+                it.copy(
+                    isLoading = false,
+                    parents = options,
+                    totalNames = total,
+                    canStartBattle = canStart,
+                )
+            }
         }
     }
 
     fun resetSelection() {
-        _state.update { it.copy(selectedParentIndex = null, password = "", error = null, isChecking = false) }
+        _state.update {
+            it.copy(selectedParentIndex = null, password = "", error = null, isChecking = false)
+        }
         load()
     }
 

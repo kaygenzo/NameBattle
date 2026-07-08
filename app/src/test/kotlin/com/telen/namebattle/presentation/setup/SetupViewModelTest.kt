@@ -200,7 +200,8 @@ class SetupViewModelTest {
         vm.lockParent2()
         advanceUntilIdle()
 
-        // when - trigger lockParent2 again (already locked, parent2CanLock=true but isCreating=false after success)
+        // when - trigger lockParent2 again (already locked, parent2CanLock=true but
+        // isCreating=false after success)
         // The key is that during the first createSession call, isCreating=true blocks re-entry
         // We verify that createSession was called exactly once total
         coVerify(exactly = 1) { createSession(any()) }

@@ -26,20 +26,26 @@ class GetParentUseCaseTest {
     fun `delegates to repo getParentBySession and returns the parent`() = runTest {
         // given
         val expectedParent = buildParent(id = 1L, parentIndex = 0)
-        coEvery { sessionRepository.getParentBySession(sessionId = 1L, parentIndex = 0) } returns expectedParent
+        coEvery {
+            sessionRepository.getParentBySession(sessionId = 1L, parentIndex = 0)
+        } returns expectedParent
 
         // when
         val result = useCase(sessionId = 1L, parentIndex = 0)
 
         // then
         assertEquals(expectedParent, result)
-        coVerify(exactly = 1) { sessionRepository.getParentBySession(sessionId = 1L, parentIndex = 0) }
+        coVerify(exactly = 1) {
+            sessionRepository.getParentBySession(sessionId = 1L, parentIndex = 0)
+        }
     }
 
     @Test
     fun `returns null when parent not found`() = runTest {
         // given
-        coEvery { sessionRepository.getParentBySession(sessionId = 1L, parentIndex = 1) } returns null
+        coEvery {
+            sessionRepository.getParentBySession(sessionId = 1L, parentIndex = 1)
+        } returns null
 
         // when
         val result = useCase(sessionId = 1L, parentIndex = 1)

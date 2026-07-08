@@ -73,7 +73,9 @@ class BattleRepositoryImplTest {
             )
         )
         val stateJson = json.encodeToString(state)
-        val entity = SessionEntity(id = 1L, gender = "BOY", createdAt = 0L, battleStateJson = stateJson)
+        val entity = SessionEntity(
+            id = 1L, gender = "BOY", createdAt = 0L, battleStateJson = stateJson
+        )
         coEvery { dao.getSessionById(1L) } returns entity
 
         // when

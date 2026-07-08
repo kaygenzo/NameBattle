@@ -116,7 +116,11 @@ internal fun SearchScreenContent(
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Column(Modifier.weight(1f)) {
                     Text(
-                        if (state.pane == SearchPane.SEARCH) stringResource(R.string.label_search_pane) else stringResource(R.string.label_my_list_pane),
+                        if (state.pane == SearchPane.SEARCH) {
+                            stringResource(R.string.label_search_pane)
+                        } else {
+                            stringResource(R.string.label_my_list_pane)
+                        },
                         style = MaterialTheme.typography.headlineSmall, color = c.textHi,
                     )
                     Text(
@@ -126,29 +130,46 @@ internal fun SearchScreenContent(
                     )
                 }
                 TextButton(onClick = onValidate) {
-                    Text(stringResource(R.string.btn_finish), color = c.accent, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        stringResource(R.string.btn_finish),
+                        color = c.accent,
+                        fontWeight = FontWeight.SemiBold,
+                    )
                 }
             }
             Spacer(Modifier.height(12.dp))
 
             if (state.pane == SearchPane.SEARCH) {
                 SegmentedTabs(
-                    options = listOf(stringResource(R.string.tab_az), stringResource(R.string.tab_top100), stringResource(R.string.tab_free)),
+                    options = listOf(
+                        stringResource(R.string.tab_az),
+                        stringResource(R.string.tab_top100),
+                        stringResource(R.string.tab_free),
+                    ),
                     selectedIndex = state.tab.ordinal,
                     onSelect = { onTabChange(SearchTab.entries[it]) },
                 )
                 Spacer(Modifier.height(12.dp))
-                SearchBody(state, onQueryChange, onLetterChange, onTopYearChange, onAdd, onAddFree, onRemove, onOpenDetail, Modifier.weight(1f))
+                SearchBody(
+                    state, onQueryChange, onLetterChange, onTopYearChange,
+                    onAdd, onAddFree, onRemove, onOpenDetail, Modifier.weight(1f),
+                )
             } else {
                 MyListBody(state, onRemove, onValidate, Modifier.weight(1f))
             }
 
             HorizontalDivider(thickness = 1.dp, color = c.border)
             Row(Modifier.fillMaxWidth()) {
-                BottomItem("☰", stringResource(R.string.label_search_pane), state.pane == SearchPane.SEARCH, Modifier.weight(1f)) {
+                BottomItem(
+                    "☰", stringResource(R.string.label_search_pane),
+                    state.pane == SearchPane.SEARCH, Modifier.weight(1f),
+                ) {
                     onPaneChange(SearchPane.SEARCH)
                 }
-                BottomItem("♥", stringResource(R.string.label_my_list_pane), state.pane == SearchPane.MY_LIST, Modifier.weight(1f)) {
+                BottomItem(
+                    "♥", stringResource(R.string.label_my_list_pane),
+                    state.pane == SearchPane.MY_LIST, Modifier.weight(1f),
+                ) {
                     onPaneChange(SearchPane.MY_LIST)
                 }
             }
@@ -192,7 +213,10 @@ private fun SearchBody(
 
         SearchTab.TOP -> Column(modifier) {
             YearSelector(state, onTopYearChange)
-            NameList(state.results, onAdd, onRemove, onOpenDetail, ranked = true, modifier = Modifier.weight(1f))
+            NameList(
+                state.results, onAdd, onRemove, onOpenDetail,
+                ranked = true, modifier = Modifier.weight(1f),
+            )
         }
 
         SearchTab.FREE -> Column(modifier) {
@@ -204,7 +228,10 @@ private fun SearchBody(
             Spacer(Modifier.height(6.dp))
             NbInput(state.query, onQueryChange, stringResource(R.string.placeholder_free_name))
             Spacer(Modifier.height(8.dp))
-            PrimaryButton(stringResource(R.string.btn_add_to_list), onClick = { onAddFree(state.query) })
+            PrimaryButton(
+                stringResource(R.string.btn_add_to_list),
+                onClick = { onAddFree(state.query) },
+            )
             Spacer(Modifier.height(12.dp))
             if (state.results.isNotEmpty()) {
                 Text(
@@ -285,7 +312,11 @@ private fun YearSelector(state: SearchUiState, onTopYearChange: (Int) -> Unit) {
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        Text(stringResource(R.string.label_since), style = MaterialTheme.typography.bodySmall, color = c.textMid)
+        Text(
+            stringResource(R.string.label_since),
+            style = MaterialTheme.typography.bodySmall,
+            color = c.textMid,
+        )
         TOP_YEARS.forEach { y ->
             val on = state.topYear == y
             Text(
@@ -347,7 +378,11 @@ private fun NameList(
                 )
                 Icon(
                     Icons.Outlined.Info,
-                    contentDescription = if (r.hasMeaning) stringResource(R.string.cd_view_detail_with_meaning) else stringResource(R.string.cd_view_detail),
+                    contentDescription = if (r.hasMeaning) {
+                        stringResource(R.string.cd_view_detail_with_meaning)
+                    } else {
+                        stringResource(R.string.cd_view_detail)
+                    },
                     tint = if (r.hasMeaning) c.pro else c.textLo,
                     modifier = Modifier
                         .size(20.dp)
@@ -356,14 +391,18 @@ private fun NameList(
                 Spacer(Modifier.width(14.dp))
                 if (r.inList) {
                     Icon(
-                        Icons.Filled.Delete, contentDescription = stringResource(R.string.cd_remove), tint = c.danger,
+                        Icons.Filled.Delete,
+                        contentDescription = stringResource(R.string.cd_remove),
+                        tint = c.danger,
                         modifier = Modifier
                             .size(20.dp)
                             .clickable { onRemove(r.id) },
                     )
                 } else {
                     Icon(
-                        Icons.Filled.Add, contentDescription = stringResource(R.string.cd_add), tint = c.success,
+                        Icons.Filled.Add,
+                        contentDescription = stringResource(R.string.cd_add),
+                        tint = c.success,
                         modifier = Modifier
                             .size(22.dp)
                             .clickable { onAdd(r.id) },
@@ -376,7 +415,12 @@ private fun NameList(
 }
 
 @Composable
-private fun MyListBody(state: SearchUiState, onRemove: (Long) -> Unit, onValidate: () -> Unit, modifier: Modifier) {
+private fun MyListBody(
+    state: SearchUiState,
+    onRemove: (Long) -> Unit,
+    onValidate: () -> Unit,
+    modifier: Modifier,
+) {
     val c = NbTheme.colors
     if (state.shortlist.isEmpty()) {
         Box(modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
@@ -423,7 +467,9 @@ private fun MyListBody(state: SearchUiState, onRemove: (Long) -> Unit, onValidat
                         modifier = Modifier.weight(1f)
                     )
                     Icon(
-                        Icons.Filled.Delete, contentDescription = stringResource(R.string.cd_remove), tint = c.danger,
+                        Icons.Filled.Delete,
+                        contentDescription = stringResource(R.string.cd_remove),
+                        tint = c.danger,
                         modifier = Modifier
                             .size(20.dp)
                             .clickable { onRemove(r.id) },

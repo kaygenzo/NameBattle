@@ -5,7 +5,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.telen.namebattle.domain.model.Gender
 import com.telen.namebattle.presentation.theme.NameBattleTheme
 
-@Preview(name = "Setup – Étape initiale – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Setup – Étape initiale – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun SetupInitialDark() {
     NameBattleTheme {
@@ -13,7 +18,12 @@ private fun SetupInitialDark() {
     }
 }
 
-@Preview(name = "Setup – Étape initiale – Light", showBackground = true, backgroundColor = 0xFFF5F5FA, showSystemUi = true)
+@Preview(
+    name = "Setup – Étape initiale – Light",
+    showBackground = true,
+    backgroundColor = 0xFFF5F5FA,
+    showSystemUi = true,
+)
 @Composable
 private fun SetupInitialLight() {
     NameBattleTheme {
@@ -21,7 +31,12 @@ private fun SetupInitialLight() {
     }
 }
 
-@Preview(name = "Setup – Parent 1 verrouillé – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Setup – Parent 1 verrouillé – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun SetupParent1LockedDark() {
     NameBattleTheme {
@@ -37,7 +52,12 @@ private fun SetupParent1LockedDark() {
     }
 }
 
-@Preview(name = "Setup – Erreur confirmation – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Setup – Erreur confirmation – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun SetupPasswordMismatchDark() {
     NameBattleTheme {
@@ -51,7 +71,12 @@ private fun SetupPasswordMismatchDark() {
     }
 }
 
-@Preview(name = "Setup – Mode solo – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Setup – Mode solo – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun SetupSoloDark() {
     NameBattleTheme {
@@ -65,7 +90,12 @@ private fun SetupSoloDark() {
     }
 }
 
-@Preview(name = "Setup – Deux parents verrouillés – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Setup – Deux parents verrouillés – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun SetupBothLockedDark() {
     NameBattleTheme {

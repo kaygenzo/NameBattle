@@ -2,7 +2,7 @@ package com.telen.namebattle.presentation.theme
 
 import androidx.compose.ui.graphics.Color
 
-// ── Dark palette ──────────────────────────────────────────────────────────────
+// ── Dark palette ─────────────────────────────────────────────────────────────
 val Page = Color(0xFF0F0F11)
 val Bg = Color(0xFF1A1A1F)
 val Bg2 = Color(0xFF14141A)
@@ -26,7 +26,7 @@ val WarningBg = Color(0x18FBBF24)
 val Danger = Color(0xFFF87171)
 val DangerBorder = Color(0x40F87171)
 
-// ── Light palette ─────────────────────────────────────────────────────────────
+// ── Light palette ────────────────────────────────────────────────────────────
 val PageLight = Color(0xFFF5F5FA)
 val BgLight = Color(0xFFEEEEF6)
 val Bg2Light = Color(0xFFE8E8F2)

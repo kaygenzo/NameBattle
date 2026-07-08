@@ -120,7 +120,9 @@ class SearchViewModelTest {
     fun `load sets hasParent2 true when session has two parents`() = runTest {
         // given
         setupDefaults()
-        val p2 = Parent(id = 11L, sessionId = sessionId, name = "Bob", passwordHash = "hash2", parentIndex = 1)
+        val p2 = Parent(
+            id = 11L, sessionId = sessionId, name = "Bob", passwordHash = "hash2", parentIndex = 1
+        )
         coEvery { getSession(sessionId) } returns session().copy(parent2 = p2)
         every { getShortlistIdsFlow(11L) } returns flowOf(emptyList())
 

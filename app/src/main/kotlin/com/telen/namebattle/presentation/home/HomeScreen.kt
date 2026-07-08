@@ -80,7 +80,8 @@ fun HomeScreen(
                         putExtra(Intent.EXTRA_STREAM, uri)
                         addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                     }
-                    context.startActivity(Intent.createChooser(intent, context.getString(R.string.share_pdf_chooser_title)))
+                    val title = context.getString(R.string.share_pdf_chooser_title)
+                    context.startActivity(Intent.createChooser(intent, title))
                 }
             }
         }
@@ -102,7 +103,9 @@ fun HomeScreen(
         onStartBattle = onLaunchBattle,
         onResumeBattle = onResumeBattle,
         onViewResults = onViewResults,
-        onRestartBattle = { sessionId -> viewModel.onRestartBattle(sessionId) { onLaunchBattle(sessionId) } },
+        onRestartBattle = { sessionId ->
+            viewModel.onRestartBattle(sessionId) { onLaunchBattle(sessionId) }
+        },
         onExportPdf = viewModel::onExportPdf,
         onDeleteSession = viewModel::onDeleteSession,
         onDeleteConfirmed = viewModel::onDeleteConfirmed,
@@ -265,7 +268,9 @@ private fun SessionCard(
                                 append(summary.totalNames)
                                 append(" ")
                                 append(prenomLabel)
-                                if (summary.allListsValidated) append(" ${stringResource(R.string.label_lists_validated)}")
+                                if (summary.allListsValidated) {
+                                    append(" ${stringResource(R.string.label_lists_validated)}")
+                                }
                             },
                             style = MaterialTheme.typography.bodySmall,
                             color = c.textLo,
@@ -290,15 +295,27 @@ private fun SessionCard(
                             enabled = summary.canStartBattle,
                         )
                         Spacer(Modifier.height(8.dp))
-                        SecondaryButton(stringResource(R.string.btn_manage_lists), onClick = onManage)
+                        SecondaryButton(
+                            stringResource(R.string.btn_manage_lists),
+                            onClick = onManage,
+                        )
                     }
                     BattleStatus.IN_PROGRESS -> {
-                        PrimaryButton(stringResource(R.string.btn_resume_battle), onClick = onResumeBattle)
+                        PrimaryButton(
+                            stringResource(R.string.btn_resume_battle),
+                            onClick = onResumeBattle,
+                        )
                         Spacer(Modifier.height(8.dp))
-                        SecondaryButton(stringResource(R.string.btn_restart_battle), onClick = onRestartBattle)
+                        SecondaryButton(
+                            stringResource(R.string.btn_restart_battle),
+                            onClick = onRestartBattle,
+                        )
                     }
                     BattleStatus.COMPLETED -> {
-                        PrimaryButton(stringResource(R.string.btn_view_results), onClick = onViewResults)
+                        PrimaryButton(
+                            stringResource(R.string.btn_view_results),
+                            onClick = onViewResults,
+                        )
                         Spacer(Modifier.height(8.dp))
                         SecondaryButton(
                             text = stringResource(
@@ -311,7 +328,10 @@ private fun SessionCard(
                             onClick = onExportPdf,
                         )
                         Spacer(Modifier.height(8.dp))
-                        SecondaryButton(stringResource(R.string.btn_restart_battle), onClick = onRestartBattle)
+                        SecondaryButton(
+                            stringResource(R.string.btn_restart_battle),
+                            onClick = onRestartBattle,
+                        )
                     }
                 }
             }

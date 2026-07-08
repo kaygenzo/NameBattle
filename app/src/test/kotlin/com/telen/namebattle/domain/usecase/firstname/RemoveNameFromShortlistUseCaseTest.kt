@@ -20,14 +20,19 @@ class RemoveNameFromShortlistUseCaseTest {
     }
 
     @Test
-    fun `delegates to repo removeNameFromShortlist with the given parentId and firstNameId`() = runTest {
+    fun `delegates to repo removeNameFromShortlist with the given parentId and firstNameId`()
+    = runTest {
         // given
-        coEvery { sessionRepository.removeNameFromShortlist(parentId = 1L, firstNameId = 10L) } returns Unit
+        coEvery {
+            sessionRepository.removeNameFromShortlist(parentId = 1L, firstNameId = 10L)
+        } returns Unit
 
         // when
         useCase(parentId = 1L, firstNameId = 10L)
 
         // then
-        coVerify(exactly = 1) { sessionRepository.removeNameFromShortlist(parentId = 1L, firstNameId = 10L) }
+        coVerify(exactly = 1) {
+            sessionRepository.removeNameFromShortlist(parentId = 1L, firstNameId = 10L)
+        }
     }
 }

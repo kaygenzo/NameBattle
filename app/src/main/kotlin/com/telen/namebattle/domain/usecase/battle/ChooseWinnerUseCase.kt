@@ -18,9 +18,11 @@ class ChooseWinnerUseCase(private val battleRepo: BattleRepository) {
     internal fun advance(state: BattleState, winnerId: Long): BattleState {
         val round = state.rounds.getOrNull(state.currentRoundIndex) ?: return state
         val updatedDuels = round.duels.toMutableList()
-        updatedDuels[state.currentDuelIndex] = updatedDuels[state.currentDuelIndex].copy(winnerId = winnerId)
+        updatedDuels[state.currentDuelIndex] =
+            updatedDuels[state.currentDuelIndex].copy(winnerId = winnerId)
         val updatedRound = round.copy(duels = updatedDuels)
-        val updatedRounds = state.rounds.toMutableList().also { it[state.currentRoundIndex] = updatedRound }
+        val updatedRounds = state.rounds.toMutableList()
+            .also { it[state.currentRoundIndex] = updatedRound }
 
         val isLastDuel = state.currentDuelIndex >= round.duels.size - 1
         return if (!isLastDuel) {

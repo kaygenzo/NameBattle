@@ -4,7 +4,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.telen.namebattle.presentation.theme.NameBattleTheme
 
-@Preview(name = "Launch – Deux parents – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Launch – Deux parents – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun LaunchTwoParentsDark() {
     NameBattleTheme {
@@ -23,7 +28,12 @@ private fun LaunchTwoParentsDark() {
     }
 }
 
-@Preview(name = "Launch – Deux parents – Light", showBackground = true, backgroundColor = 0xFFF5F5FA, showSystemUi = true)
+@Preview(
+    name = "Launch – Deux parents – Light",
+    showBackground = true,
+    backgroundColor = 0xFFF5F5FA,
+    showSystemUi = true,
+)
 @Composable
 private fun LaunchTwoParentsLight() {
     NameBattleTheme {
@@ -42,7 +52,12 @@ private fun LaunchTwoParentsLight() {
     }
 }
 
-@Preview(name = "Launch – Solo – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Launch – Solo – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun LaunchSoloDark() {
     NameBattleTheme {
@@ -60,7 +75,12 @@ private fun LaunchSoloDark() {
     }
 }
 
-@Preview(name = "Launch – Démarrage en cours – Dark", showBackground = true, backgroundColor = 0xFF0F0F11, showSystemUi = true)
+@Preview(
+    name = "Launch – Démarrage en cours – Dark",
+    showBackground = true,
+    backgroundColor = 0xFF0F0F11,
+    showSystemUi = true,
+)
 @Composable
 private fun LaunchStartingDark() {
     NameBattleTheme {

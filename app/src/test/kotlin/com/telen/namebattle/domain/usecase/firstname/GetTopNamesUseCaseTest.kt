@@ -28,13 +28,17 @@ class GetTopNamesUseCaseTest {
     fun `delegates to repo getTopNames and returns the flow`() = runTest {
         // given
         val expectedNames = listOf(buildFirstName(id = 1L), buildFirstName(id = 2L))
-        every { firstNameRepository.getTopNames(gender = Gender.GIRL, fromYear = 2000) } returns flowOf(expectedNames)
+        every {
+            firstNameRepository.getTopNames(gender = Gender.GIRL, fromYear = 2000)
+        } returns flowOf(expectedNames)
 
         // when
         val result = useCase(gender = Gender.GIRL, fromYear = 2000).first()
 
         // then
         assertEquals(expectedNames, result)
-        verify(exactly = 1) { firstNameRepository.getTopNames(gender = Gender.GIRL, fromYear = 2000) }
+        verify(exactly = 1) {
+            firstNameRepository.getTopNames(gender = Gender.GIRL, fromYear = 2000)
+        }
     }
 }

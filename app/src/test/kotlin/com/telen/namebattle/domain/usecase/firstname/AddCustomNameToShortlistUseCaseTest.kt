@@ -28,28 +28,42 @@ class AddCustomNameToShortlistUseCaseTest {
     fun `calls getOrCreateCustom then addNameToShortlist with the returned id`() = runTest {
         // given
         val customName = buildFirstName(id = 99L, name = "Zephyr", gender = Gender.BOY)
-        coEvery { firstNameRepository.getOrCreateCustom(name = "Zephyr", gender = Gender.BOY) } returns customName
-        coEvery { sessionRepository.addNameToShortlist(parentId = 1L, firstNameId = 99L) } returns Unit
+        coEvery {
+            firstNameRepository.getOrCreateCustom(name = "Zephyr", gender = Gender.BOY)
+        } returns customName
+        coEvery {
+            sessionRepository.addNameToShortlist(parentId = 1L, firstNameId = 99L)
+        } returns Unit
 
         // when
         useCase(parentId = 1L, name = "Zephyr", gender = Gender.BOY)
 
         // then
-        coVerify(exactly = 1) { firstNameRepository.getOrCreateCustom(name = "Zephyr", gender = Gender.BOY) }
-        coVerify(exactly = 1) { sessionRepository.addNameToShortlist(parentId = 1L, firstNameId = 99L) }
+        coVerify(exactly = 1) {
+            firstNameRepository.getOrCreateCustom(name = "Zephyr", gender = Gender.BOY)
+        }
+        coVerify(exactly = 1) {
+            sessionRepository.addNameToShortlist(parentId = 1L, firstNameId = 99L)
+        }
     }
 
     @Test
     fun `uses the id from getOrCreateCustom even when name already exists`() = runTest {
         // given
         val existingName = buildFirstName(id = 42L, name = "Emma", gender = Gender.GIRL)
-        coEvery { firstNameRepository.getOrCreateCustom(name = "Emma", gender = Gender.GIRL) } returns existingName
-        coEvery { sessionRepository.addNameToShortlist(parentId = 2L, firstNameId = 42L) } returns Unit
+        coEvery {
+            firstNameRepository.getOrCreateCustom(name = "Emma", gender = Gender.GIRL)
+        } returns existingName
+        coEvery {
+            sessionRepository.addNameToShortlist(parentId = 2L, firstNameId = 42L)
+        } returns Unit
 
         // when
         useCase(parentId = 2L, name = "Emma", gender = Gender.GIRL)
 
         // then
-        coVerify(exactly = 1) { sessionRepository.addNameToShortlist(parentId = 2L, firstNameId = 42L) }
+        coVerify(exactly = 1) {
+            sessionRepository.addNameToShortlist(parentId = 2L, firstNameId = 42L)
+        }
     }
 }

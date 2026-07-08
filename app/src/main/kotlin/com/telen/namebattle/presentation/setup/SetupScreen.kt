@@ -94,7 +94,10 @@ internal fun SetupScreenContent(
     val c = NbTheme.colors
 
     val genders = listOf(Gender.BOY, Gender.GIRL)
-    val genderLabels = listOf(stringResource(R.string.label_gender_boy), stringResource(R.string.label_gender_girl))
+    val genderLabels = listOf(
+        stringResource(R.string.label_gender_boy),
+        stringResource(R.string.label_gender_girl),
+    )
 
     Scaffold(containerColor = c.page) { padding ->
         Column(
