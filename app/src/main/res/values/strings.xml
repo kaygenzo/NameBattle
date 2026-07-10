@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- App -->
-    <string name="app_name">PrénomBattle</string>
+    <string name="app_name">Bataille de prénom</string>
     <string name="app_tagline">Aide au choix du prénom de bébé</string>
 
     <!-- Common -->
