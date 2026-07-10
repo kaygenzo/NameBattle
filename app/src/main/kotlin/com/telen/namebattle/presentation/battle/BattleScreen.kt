@@ -123,7 +123,7 @@ internal fun BattleScreenContent(
             Spacer(Modifier.height(16.dp))
 
             when (state.mode) {
-                BattleMode.DUEL -> DuelView(state, onChoose)
+                BattleMode.DUEL -> DuelView(state, onChoose, modifier = Modifier.weight(1f))
                 BattleMode.AUTO_PASS -> AutoPassView(state, onChoose)
                 BattleMode.ROUND_SUMMARY -> state.summary?.let { RoundSummaryView(it, onContinue) }
             }
@@ -133,208 +133,222 @@ internal fun BattleScreenContent(
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
-private fun DuelView(state: BattleUiState, onChoose: (Long) -> Unit) {
+private fun DuelView(
+    state: BattleUiState,
+    onChoose: (Long) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val c = NbTheme.colors
     val context = LocalContext.current
 
-    Text(
-        stringResource(R.string.label_which_name_survives),
-        style = MaterialTheme.typography.bodySmall,
-        color = c.textMid, textAlign = TextAlign.Center,
-        modifier = Modifier.fillMaxWidth()
-    )
-    Spacer(Modifier.height(10.dp))
-
-    BoxWithConstraints(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(130.dp)
+    Column(
+        modifier = modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
     ) {
-        val density = LocalDensity.current
-        val stageWidth = maxWidth   // capture hors du scope graphicsLayer
+        Text(
+            stringResource(R.string.label_which_name_survives),
+            style = MaterialTheme.typography.bodySmall,
+            color = c.textMid, textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(Modifier.height(10.dp))
 
-        // ── Animatables ───────────────────────────────────────────────────────
-        // Slide: values in px, positive = rightward
-        val slideL = remember { Animatable(0f) }
-        val slideR = remember { Animatable(0f) }
-        // Screen shake: values in dp, converted to px inside graphicsLayer
-        val shakeX   = remember { Animatable(0f) }
-        val shakeY   = remember { Animatable(0f) }
-        val shakeRot = remember { Animatable(0f) }
-        // Flash and VS badge
-        val flash    = remember { Animatable(0f) }
-        val vsScale  = remember { Animatable(0f) }
-        val vsAlpha  = remember { Animatable(0f) }
-
-        // Card width in px (≈ 50% of parent − gap)
-        val cardWidthPx = with(density) { (stageWidth / 2 - 12.dp).toPx() }
-
-        LaunchedEffect(state.duelKey) {
-            // ── Reset ─────────────────────────────────────────────────────────
-            slideL.snapTo(-cardWidthPx * 1.6f)
-            slideR.snapTo(cardWidthPx * 1.6f)
-            shakeX.snapTo(0f); shakeY.snapTo(0f); shakeRot.snapTo(0f)
-            flash.snapTo(0f); vsScale.snapTo(0f); vsAlpha.snapTo(0f)
-
-            // ── Crash (0 → 550ms) ─────────────────────────────────────────────
-            // Damped bounce: 0% off-screen / 65% +7% / 78% -3% / 88% +2% / 100% 0
-            launch {
-                slideL.animateTo(0f, keyframes {
-                    durationMillis = 550
-                    -cardWidthPx * 1.6f at 0
-                     cardWidthPx * 0.07f at 357
-                    -cardWidthPx * 0.03f at 429
-                     cardWidthPx * 0.02f at 484
-                    0f at 550
-                })
-            }
-            launch {
-                slideR.animateTo(0f, keyframes {
-                    durationMillis = 550
-                     cardWidthPx * 1.6f at 0
-                    -cardWidthPx * 0.07f at 357
-                     cardWidthPx * 0.03f at 429
-                    -cardWidthPx * 0.02f at 484
-                    0f at 550
-                })
-            }
-
-            // ── Impact at 340ms ───────────────────────────────────────────────
-            delay(340)
-
-            // Vibration waveform [0, 60, 30, 40]
-            @Suppress("DEPRECATION")
-            val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                context.getSystemService(Vibrator::class.java)
-            } else {
-                @Suppress("DEPRECATION")
-                context.getSystemService(android.content.Context.VIBRATOR_SERVICE) as? Vibrator
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                vibrator?.vibrate(VibrationEffect.createWaveform(longArrayOf(0, 60, 30, 40), -1))
-            } else {
-                @Suppress("DEPRECATION")
-                vibrator?.vibrate(130)
-            }
-
-            // Screen shake — 280ms
-            launch {
-                shakeX.animateTo(0f, keyframes {
-                    durationMillis = 280
-                    -5f at 42;  5f at 84; -4f at 126; 4f at 168; -2f at 210; 0f at 280
-                })
-            }
-            launch {
-                shakeY.animateTo(0f, keyframes {
-                    durationMillis = 280
-                    2f at 42; -2f at 84; 1f at 126; -1f at 168; 1f at 210; 0f at 280
-                })
-            }
-            launch {
-                shakeRot.animateTo(0f, keyframes {
-                    durationMillis = 280
-                    -0.4f at 42; 0.4f at 84; -0.3f at 126; 0.2f at 168; -0.1f at 210; 0f at 280
-                })
-            }
-
-            // White flash — 300ms
-            launch {
-                flash.snapTo(0.55f)
-                flash.animateTo(0f, tween(durationMillis = 300))
-            }
-
-            // VS badge pops in — 250ms (10ms after impact)
-            delay(10)
-            launch {
-                vsScale.animateTo(1f, keyframes {
-                    durationMillis = 250
-                    1.35f at 150
-                    1f at 250
-                })
-            }
-            vsAlpha.animateTo(1f, tween(durationMillis = 150))
-        }
-
-        // ── Stage (clipped + shake) ───────────────────────────────────────────
-        Box(
+        BoxWithConstraints(
             modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(8.dp))
-                .background(c.bg)
-                .graphicsLayer {
-                    val dpToPx = density.density
-                    translationX = shakeX.value * dpToPx
-                    translationY = shakeY.value * dpToPx
-                    rotationZ = shakeRot.value
-                }
+                .fillMaxWidth()
+                .height(130.dp)
         ) {
-            // Left card
-            DuelCard(
-                name = state.leftName,
-                accent = c.pro, bg = c.proBg, border = c.proBorder,
-                onChoose = { onChoose(state.leftId) },
-                modifier = Modifier
-                    .align(Alignment.CenterStart)
-                    .padding(start = 2.dp, top = 4.dp, bottom = 4.dp)
-                    .width(stageWidth / 2 - 20.dp)
-                    .fillMaxHeight()
-                    .graphicsLayer { translationX = slideL.value }
-            )
+            val density = LocalDensity.current
+            val stageWidth = maxWidth   // capture hors du scope graphicsLayer
 
-            // Right card
-            DuelCard(
-                name = state.rightName,
-                accent = c.accent, bg = c.accentBg, border = c.accentBorder,
-                onChoose = { onChoose(state.rightId) },
-                modifier = Modifier
-                    .align(Alignment.CenterEnd)
-                    .padding(end = 2.dp, top = 4.dp, bottom = 4.dp)
-                    .width(stageWidth / 2 - 20.dp)
-                    .fillMaxHeight()
-                    .graphicsLayer { translationX = slideR.value }
-            )
+            // ── Animatables ───────────────────────────────────────────────────────
+            // Slide: values in px, positive = rightward
+            val slideL = remember { Animatable(0f) }
+            val slideR = remember { Animatable(0f) }
+            // Screen shake: values in dp, converted to px inside graphicsLayer
+            val shakeX = remember { Animatable(0f) }
+            val shakeY = remember { Animatable(0f) }
+            val shakeRot = remember { Animatable(0f) }
+            // Flash and VS badge
+            val flash = remember { Animatable(0f) }
+            val vsScale = remember { Animatable(0f) }
+            val vsAlpha = remember { Animatable(0f) }
 
-            // VS badge — pops in at impact
+            // Card width in px (≈ 50% of parent − gap)
+            val cardWidthPx = with(density) { (stageWidth / 2 - 12.dp).toPx() }
+
+            LaunchedEffect(state.duelKey) {
+                // ── Reset ─────────────────────────────────────────────────────────
+                slideL.snapTo(-cardWidthPx * 1.6f)
+                slideR.snapTo(cardWidthPx * 1.6f)
+                shakeX.snapTo(0f); shakeY.snapTo(0f); shakeRot.snapTo(0f)
+                flash.snapTo(0f); vsScale.snapTo(0f); vsAlpha.snapTo(0f)
+
+                // ── Crash (0 → 550ms) ─────────────────────────────────────────────
+                // Damped bounce: 0% off-screen / 65% +7% / 78% -3% / 88% +2% / 100% 0
+                launch {
+                    slideL.animateTo(0f, keyframes {
+                        durationMillis = 550
+                        -cardWidthPx * 1.6f at 0
+                        cardWidthPx * 0.07f at 357
+                        -cardWidthPx * 0.03f at 429
+                        cardWidthPx * 0.02f at 484
+                        0f at 550
+                    })
+                }
+                launch {
+                    slideR.animateTo(0f, keyframes {
+                        durationMillis = 550
+                        cardWidthPx * 1.6f at 0
+                        -cardWidthPx * 0.07f at 357
+                        cardWidthPx * 0.03f at 429
+                        -cardWidthPx * 0.02f at 484
+                        0f at 550
+                    })
+                }
+
+                // ── Impact at 340ms ───────────────────────────────────────────────
+                delay(340)
+
+                // Vibration waveform [0, 60, 30, 40]
+                @Suppress("DEPRECATION")
+                val vibrator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    context.getSystemService(Vibrator::class.java)
+                } else {
+                    @Suppress("DEPRECATION")
+                    context.getSystemService(android.content.Context.VIBRATOR_SERVICE) as? Vibrator
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    vibrator?.vibrate(
+                        VibrationEffect.createWaveform(
+                            longArrayOf(0, 60, 30, 40),
+                            -1
+                        )
+                    )
+                } else {
+                    @Suppress("DEPRECATION")
+                    vibrator?.vibrate(130)
+                }
+
+                // Screen shake — 280ms
+                launch {
+                    shakeX.animateTo(0f, keyframes {
+                        durationMillis = 280
+                        -5f at 42; 5f at 84; -4f at 126; 4f at 168; -2f at 210; 0f at 280
+                    })
+                }
+                launch {
+                    shakeY.animateTo(0f, keyframes {
+                        durationMillis = 280
+                        2f at 42; -2f at 84; 1f at 126; -1f at 168; 1f at 210; 0f at 280
+                    })
+                }
+                launch {
+                    shakeRot.animateTo(0f, keyframes {
+                        durationMillis = 280
+                        -0.4f at 42; 0.4f at 84; -0.3f at 126; 0.2f at 168; -0.1f at 210; 0f at 280
+                    })
+                }
+
+                // White flash — 300ms
+                launch {
+                    flash.snapTo(0.55f)
+                    flash.animateTo(0f, tween(durationMillis = 300))
+                }
+
+                // VS badge pops in — 250ms (10ms after impact)
+                delay(10)
+                launch {
+                    vsScale.animateTo(1f, keyframes {
+                        durationMillis = 250
+                        1.35f at 150
+                        1f at 250
+                    })
+                }
+                vsAlpha.animateTo(1f, tween(durationMillis = 150))
+            }
+
+            // ── Stage (clipped + shake) ───────────────────────────────────────────
             Box(
                 modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(30.dp)
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(c.bg)
                     .graphicsLayer {
-                        scaleX = vsScale.value
-                        scaleY = vsScale.value
-                        alpha = vsAlpha.value
+                        val dpToPx = density.density
+                        translationX = shakeX.value * dpToPx
+                        translationY = shakeY.value * dpToPx
+                        rotationZ = shakeRot.value
                     }
-                    .clip(CircleShape)
-                    .background(c.bg3)
-                    .border(2.dp, c.border2, CircleShape),
-                contentAlignment = Alignment.Center,
             ) {
-                Text(
-                    "VS",
-                    fontSize = 9.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = c.textHi,
+                // Left card
+                DuelCard(
+                    name = state.leftName,
+                    accent = c.pro, bg = c.proBg, border = c.proBorder,
+                    onChoose = { onChoose(state.leftId) },
+                    modifier = Modifier
+                        .align(Alignment.CenterStart)
+                        .padding(start = 2.dp, top = 4.dp, bottom = 4.dp)
+                        .width(stageWidth / 2 - 20.dp)
+                        .fillMaxHeight()
+                        .graphicsLayer { translationX = slideL.value }
                 )
-            }
 
-            // White flash overlay
-            if (flash.value > 0f) {
-                Box(
-                    Modifier
-                        .fillMaxSize()
-                        .background(Color.White.copy(alpha = flash.value))
+                // Right card
+                DuelCard(
+                    name = state.rightName,
+                    accent = c.accent, bg = c.accentBg, border = c.accentBorder,
+                    onChoose = { onChoose(state.rightId) },
+                    modifier = Modifier
+                        .align(Alignment.CenterEnd)
+                        .padding(end = 2.dp, top = 4.dp, bottom = 4.dp)
+                        .width(stageWidth / 2 - 20.dp)
+                        .fillMaxHeight()
+                        .graphicsLayer { translationX = slideR.value }
                 )
+
+                // VS badge — pops in at impact
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(30.dp)
+                        .graphicsLayer {
+                            scaleX = vsScale.value
+                            scaleY = vsScale.value
+                            alpha = vsAlpha.value
+                        }
+                        .clip(CircleShape)
+                        .background(c.bg3)
+                        .border(2.dp, c.border2, CircleShape),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        "VS",
+                        fontSize = 9.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = c.textHi,
+                    )
+                }
+
+                // White flash overlay
+                if (flash.value > 0f) {
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .background(Color.White.copy(alpha = flash.value))
+                    )
+                }
             }
         }
+        Spacer(Modifier.height(8.dp))
+        Text(
+            stringResource(R.string.label_other_eliminated),
+            style = MaterialTheme.typography.bodySmall,
+            color = c.textLo, textAlign = TextAlign.Center,
+            modifier = Modifier.fillMaxWidth()
+        )
     }
-
-    Spacer(Modifier.height(8.dp))
-    Text(
-        stringResource(R.string.label_other_eliminated),
-        style = MaterialTheme.typography.bodySmall,
-        color = c.textLo, textAlign = TextAlign.Center,
-        modifier = Modifier.fillMaxWidth()
-    )
 }
 
 @Composable
@@ -393,7 +407,9 @@ private fun AutoPassView(state: BattleUiState, onChoose: (Long) -> Unit) {
         border = BorderStroke(1.dp, c.successBorder), modifier = Modifier.fillMaxWidth(),
     ) {
         Column(
-            Modifier.padding(28.dp).fillMaxWidth(),
+            Modifier
+                .padding(28.dp)
+                .fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Box(
