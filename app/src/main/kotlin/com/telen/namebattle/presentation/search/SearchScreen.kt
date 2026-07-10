@@ -41,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -123,6 +124,7 @@ internal fun SearchScreenContent(
                             stringResource(R.string.label_my_list_pane)
                         },
                         style = MaterialTheme.typography.headlineSmall, color = c.textHi,
+                        modifier = Modifier.testTag("pane_title")
                     )
                     Text(
                         "${state.parentName} · ${
