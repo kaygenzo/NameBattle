@@ -1,5 +1,7 @@
 # PrénomBattle
 
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE)
+
 A collaborative Android app for expecting parents to settle the eternal debate: which baby name wins? Each parent builds their shortlist, then names fight head-to-head in a tournament-style battle until only the finalists remain.
 
 ---
