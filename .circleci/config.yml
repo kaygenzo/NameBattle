@@ -3,15 +3,10 @@ version: 2.1
 orbs:
   android: circleci/android@2.5.0
 
-parameters:
-  android_image:
-    type: string
-    default: "kaygenzo/android-fastlane:36"
-
 executors:
   android:
     docker:
-      - image: << pipeline.parameters.android_image >>
+      - image: cimg/android:2026.07.1
     resource_class: large
 
 commands:
@@ -19,12 +14,41 @@ commands:
     steps:
       - checkout
       - run:
+          name: Ensure Java 21
+          command: |
+            if java -version 2>&1 | grep -q "version \"21"; then
+              echo "Java 21 already present"
+            else
+              sudo apt-get update -qq
+              sudo apt-get install -y openjdk-21-jdk
+              echo 'export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64' >> "$BASH_ENV"
+              echo 'export PATH=$JAVA_HOME/bin:$PATH' >> "$BASH_ENV"
+              source "$BASH_ENV"
+            fi
+            java -version
+      - run:
           name: Initialize all configuration files
           command: |
             echo "$GOOGLE_SERVICES_JSON" | base64 --decode > app/google-services.json
             echo $KEYSTORE_FILE | base64 -d > telen.release.jks
             echo $PLAY_STORE_CREDENTIALS | base64 -d > play-store-credentials.json
       - android/restore-gradle-cache
+
+  install-fastlane:
+    steps:
+      - restore_cache:
+          keys:
+            - gems-v1-{{ checksum "Gemfile" }}
+            - gems-v1-
+      - run:
+          name: Install Ruby gems
+          command: |
+            bundle config set path 'vendor/bundle'
+            bundle install
+      - save_cache:
+          key: gems-v1-{{ checksum "Gemfile" }}
+          paths:
+            - vendor/bundle
 
   cleanup:
     steps:
@@ -110,13 +134,16 @@ jobs:
 
   deploy-alpha:
     executor: android
+    environment:
+      FASTLANE_SKIP_UPDATE_CHECK: "true"
+      FASTLANE_HIDE_CHANGELOG: "true"
     steps:
       - setup
+      - install-fastlane
       - run:
-          name: Deploy release APK on Play Store
+          name: Deploy release AAB on Play Store
           command: |
             ./gradlew bundleRelease
-            bundle install
             bundle exec fastlane deploy_to_alpha
       - android/save-gradle-cache
       - store_artifacts:
