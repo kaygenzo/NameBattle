@@ -4,6 +4,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsEnabled
 import androidx.compose.ui.test.assertIsNotEnabled
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -20,18 +21,6 @@ class HomeScreenTest {
     @get:Rule
     val rule = createComposeRule()
 
-    private fun defaultCallbacks(
-        onCreateSession: () -> Unit = {},
-        onManageLists: (Long) -> Unit = {},
-        onStartBattle: (Long) -> Unit = {},
-        onResumeBattle: (Long) -> Unit = {},
-        onViewResults: (Long) -> Unit = {},
-        onRestartBattle: (Long) -> Unit = {},
-        onDeleteSession: (Long) -> Unit = {},
-        onDeleteConfirmed: () -> Unit = {},
-        onDeleteDismissed: () -> Unit = {},
-    ) = Triple(onCreateSession, onManageLists, onDeleteSession)
-
     // region — loading state
 
     @Test
@@ -41,7 +30,7 @@ class HomeScreenTest {
                 state = HomeUiState(isLoading = true),
                 onCreateSession = {}, onManageLists = {}, onStartBattle = {},
                 onResumeBattle = {}, onViewResults = {}, onRestartBattle = {},
-                onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
+                onAbout = {}, onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
             )
         }
         rule.onNodeWithText("Nouvelle session", substring = true).assertDoesNotExist()
@@ -56,7 +45,7 @@ class HomeScreenTest {
                 state = HomeUiState(isLoading = false, sessions = emptyList()),
                 onCreateSession = {}, onManageLists = {}, onStartBattle = {},
                 onResumeBattle = {}, onViewResults = {}, onRestartBattle = {},
-                onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
+                onAbout = {}, onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
             )
         }
         rule.onNodeWithText("Bataille de prénom").assertIsDisplayed()
@@ -70,7 +59,7 @@ class HomeScreenTest {
                 state = HomeUiState(isLoading = false, sessions = emptyList()),
                 onCreateSession = {}, onManageLists = {}, onStartBattle = {},
                 onResumeBattle = {}, onViewResults = {}, onRestartBattle = {},
-                onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
+                onAbout = {}, onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
             )
         }
         rule.onNodeWithText("Nouvelle session", substring = true).assertIsDisplayed()
@@ -84,10 +73,39 @@ class HomeScreenTest {
                 state = HomeUiState(isLoading = false, sessions = emptyList()),
                 onCreateSession = { called = true }, onManageLists = {}, onStartBattle = {},
                 onResumeBattle = {}, onViewResults = {}, onRestartBattle = {},
-                onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
+                onAbout = {}, onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
             )
         }
         rule.onNodeWithText("Nouvelle session", substring = true).performClick()
+        assertTrue(called)
+    }
+
+    @Test
+    fun about_icon_is_displayed() {
+        rule.setThemedContent {
+            HomeScreenContent(
+                state = HomeUiState(isLoading = false, sessions = emptyList()),
+                onCreateSession = {}, onManageLists = {}, onStartBattle = {},
+                onResumeBattle = {}, onViewResults = {}, onRestartBattle = {},
+                onAbout = {}, onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
+            )
+        }
+        rule.onNodeWithContentDescription("À propos de l'application").assertIsDisplayed()
+    }
+
+    @Test
+    fun clicking_about_icon_triggers_callback() {
+        var called = false
+        rule.setThemedContent {
+            HomeScreenContent(
+                state = HomeUiState(isLoading = false, sessions = emptyList()),
+                onCreateSession = {}, onManageLists = {}, onStartBattle = {},
+                onResumeBattle = {}, onViewResults = {}, onRestartBattle = {},
+                onAbout = { called = true }, onDeleteSession = {}, onDeleteConfirmed = {},
+                onDeleteDismissed = {},
+            )
+        }
+        rule.onNodeWithContentDescription("À propos de l'application").performClick()
         assertTrue(called)
     }
 
@@ -113,7 +131,7 @@ class HomeScreenTest {
                 ),
                 onCreateSession = {}, onManageLists = {}, onStartBattle = {},
                 onResumeBattle = {}, onViewResults = {}, onRestartBattle = {},
-                onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
+                onAbout = {}, onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
             )
         }
         rule.onNodeWithText("Alice & Bob").assertIsDisplayed()
@@ -139,7 +157,7 @@ class HomeScreenTest {
                 ),
                 onCreateSession = {}, onManageLists = {}, onStartBattle = {},
                 onResumeBattle = {}, onViewResults = {}, onRestartBattle = {},
-                onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
+                onAbout = {}, onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
             )
         }
         rule.onNodeWithText("Commencer la bataille", substring = true).assertIsDisplayed()
@@ -166,7 +184,7 @@ class HomeScreenTest {
                 ),
                 onCreateSession = {}, onManageLists = {}, onStartBattle = {},
                 onResumeBattle = {}, onViewResults = {}, onRestartBattle = {},
-                onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
+                onAbout = {}, onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
             )
         }
         rule.onNodeWithText("Commencer la bataille", substring = true).assertIsNotEnabled()
@@ -193,7 +211,7 @@ class HomeScreenTest {
                 ),
                 onCreateSession = {}, onManageLists = {}, onStartBattle = { receivedId = it },
                 onResumeBattle = {}, onViewResults = {}, onRestartBattle = {},
-                onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
+                onAbout = {}, onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
             )
         }
         rule.onNodeWithText("Commencer la bataille", substring = true).performClick()
@@ -222,7 +240,7 @@ class HomeScreenTest {
                 ),
                 onCreateSession = {}, onManageLists = {}, onStartBattle = {},
                 onResumeBattle = {}, onViewResults = {}, onRestartBattle = {},
-                onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
+                onAbout = {}, onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
             )
         }
         rule.onNodeWithText("Reprendre la bataille", substring = true).assertIsDisplayed()
@@ -249,7 +267,7 @@ class HomeScreenTest {
                 ),
                 onCreateSession = {}, onManageLists = {}, onStartBattle = {},
                 onResumeBattle = { receivedId = it }, onViewResults = {}, onRestartBattle = {},
-                onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
+                onAbout = {}, onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
             )
         }
         rule.onNodeWithText("Reprendre la bataille", substring = true).performClick()
@@ -278,7 +296,7 @@ class HomeScreenTest {
                 ),
                 onCreateSession = {}, onManageLists = {}, onStartBattle = {},
                 onResumeBattle = {}, onViewResults = {}, onRestartBattle = {},
-                onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
+                onAbout = {}, onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
             )
         }
         rule.onNodeWithText("Consulter les résultats", substring = true).assertIsDisplayed()
@@ -306,7 +324,7 @@ class HomeScreenTest {
                 ),
                 onCreateSession = {}, onManageLists = {}, onStartBattle = {},
                 onResumeBattle = {}, onViewResults = { receivedId = it }, onRestartBattle = {},
-                onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
+                onAbout = {}, onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
             )
         }
         rule.onNodeWithText("Consulter les résultats", substring = true).performClick()
@@ -336,7 +354,7 @@ class HomeScreenTest {
                 ),
                 onCreateSession = {}, onManageLists = {}, onStartBattle = {},
                 onResumeBattle = {}, onViewResults = {}, onRestartBattle = {},
-                onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
+                onAbout = {}, onDeleteSession = {}, onDeleteConfirmed = {}, onDeleteDismissed = {},
             )
         }
         rule.onNodeWithText("Annuler").assertIsDisplayed()
@@ -354,7 +372,7 @@ class HomeScreenTest {
                 ),
                 onCreateSession = {}, onManageLists = {}, onStartBattle = {},
                 onResumeBattle = {}, onViewResults = {}, onRestartBattle = {},
-                onDeleteSession = {}, onDeleteConfirmed = { confirmed = true },
+                onAbout = {}, onDeleteSession = {}, onDeleteConfirmed = { confirmed = true },
                 onDeleteDismissed = {},
             )
         }

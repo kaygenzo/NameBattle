@@ -6,6 +6,10 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Info
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.DisposableEffect
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -62,6 +66,7 @@ fun HomeScreen(
     onLaunchBattle: (sessionId: Long) -> Unit,
     onResumeBattle: (sessionId: Long) -> Unit,
     onViewResults: (sessionId: Long) -> Unit,
+    onAbout: () -> Unit,
     viewModel: HomeViewModel = koinViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -106,6 +111,7 @@ fun HomeScreen(
         onRestartBattle = { sessionId ->
             viewModel.onRestartBattle(sessionId) { onLaunchBattle(sessionId) }
         },
+        onAbout = onAbout,
         onExportPdf = viewModel::onExportPdf,
         onDeleteSession = viewModel::onDeleteSession,
         onDeleteConfirmed = viewModel::onDeleteConfirmed,
@@ -122,6 +128,7 @@ internal fun HomeScreenContent(
     onResumeBattle: (sessionId: Long) -> Unit,
     onViewResults: (sessionId: Long) -> Unit,
     onRestartBattle: (sessionId: Long) -> Unit,
+    onAbout: () -> Unit,
     onExportPdf: (sessionId: Long) -> Unit = {},
     onDeleteSession: (sessionId: Long) -> Unit,
     onDeleteConfirmed: () -> Unit,
@@ -130,73 +137,86 @@ internal fun HomeScreenContent(
     val c = NbTheme.colors
 
     Scaffold(containerColor = c.page) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 20.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Spacer(Modifier.height(40.dp))
-            Box(
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .padding(padding)) {
+            Column(
                 modifier = Modifier
-                    .size(72.dp)
-                    .clip(CircleShape),
-                contentAlignment = Alignment.Center
+                    .fillMaxSize()
+                    .verticalScroll(rememberScrollState())
+                    .padding(horizontal = 20.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Image(
-                    painter = painterResource(R.drawable.ic_launcher_background),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
+                Spacer(Modifier.height(40.dp))
+                Box(
+                    modifier = Modifier
+                        .size(72.dp)
+                        .clip(CircleShape),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        painter = painterResource(R.drawable.ic_launcher_background),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                    Image(
+                        painter = painterResource(R.drawable.ic_launcher_foreground),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize()
+                    )
+                }
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    stringResource(R.string.app_name),
+                    style = MaterialTheme.typography.displaySmall,
+                    color = c.textHi,
                 )
-                Image(
-                    painter = painterResource(R.drawable.ic_launcher_foreground),
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize()
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    stringResource(R.string.app_tagline),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = c.textLo,
+                    textAlign = TextAlign.Center,
                 )
-            }
-            Spacer(Modifier.height(8.dp))
-            Text(
-                stringResource(R.string.app_name),
-                style = MaterialTheme.typography.displaySmall,
-                color = c.textHi,
-            )
-            Spacer(Modifier.height(4.dp))
-            Text(
-                stringResource(R.string.app_tagline),
-                style = MaterialTheme.typography.bodySmall,
-                color = c.textLo,
-                textAlign = TextAlign.Center,
-            )
-            Spacer(Modifier.height(28.dp))
+                Spacer(Modifier.height(28.dp))
 
-            if (state.isLoading) {
-                CircularProgressIndicator(color = c.accent)
-            } else {
-                state.sessions.forEach { summary ->
-                    SessionCard(
-                        summary = summary,
-                        isExporting = state.isExportingSessionId == summary.sessionId,
-                        onStartBattle = { onStartBattle(summary.sessionId) },
-                        onResumeBattle = { onResumeBattle(summary.sessionId) },
-                        onViewResults = { onViewResults(summary.sessionId) },
-                        onRestartBattle = { onRestartBattle(summary.sessionId) },
-                        onExportPdf = { onExportPdf(summary.sessionId) },
-                        onManage = { onManageLists(summary.sessionId) },
-                        onDelete = { onDeleteSession(summary.sessionId) },
+                if (state.isLoading) {
+                    CircularProgressIndicator(color = c.accent)
+                } else {
+                    state.sessions.forEach { summary ->
+                        SessionCard(
+                            summary = summary,
+                            isExporting = state.isExportingSessionId == summary.sessionId,
+                            onStartBattle = { onStartBattle(summary.sessionId) },
+                            onResumeBattle = { onResumeBattle(summary.sessionId) },
+                            onViewResults = { onViewResults(summary.sessionId) },
+                            onRestartBattle = { onRestartBattle(summary.sessionId) },
+                            onExportPdf = { onExportPdf(summary.sessionId) },
+                            onManage = { onManageLists(summary.sessionId) },
+                            onDelete = { onDeleteSession(summary.sessionId) },
+                            modifier = Modifier.widthIn(max = 420.dp),
+                        )
+                        Spacer(Modifier.height(12.dp))
+                    }
+                    PrimaryButton(
+                        text = stringResource(R.string.btn_new_session),
+                        onClick = onCreateSession,
                         modifier = Modifier.widthIn(max = 420.dp),
                     )
-                    Spacer(Modifier.height(12.dp))
                 }
-                PrimaryButton(
-                    text = stringResource(R.string.btn_new_session),
-                    onClick = onCreateSession,
-                    modifier = Modifier.widthIn(max = 420.dp),
+
+                Spacer(Modifier.height(48.dp))
+            }
+            IconButton(
+                onClick = onAbout,
+                modifier = Modifier.align(Alignment.TopEnd),
+            ) {
+                Icon(
+                    imageVector = Icons.Outlined.Info,
+                    contentDescription = stringResource(R.string.cd_about),
+                    tint = c.textMid,
                 )
             }
-
-            Spacer(Modifier.height(48.dp))
         }
     }
 

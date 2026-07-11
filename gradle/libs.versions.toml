@@ -2,6 +2,7 @@
 agp                 = "9.2.1"
 kotlin              = "2.2.20"
 ksp                 = "2.2.20-2.0.2"
+aboutlibraries      = "11.2.3"
 composeBom          = "2026.06.01"
 activityCompose     = "1.13.0"
 room                = "2.8.4"
@@ -59,6 +60,7 @@ compose-ui-test-manifest       = { group = "androidx.compose.ui",       name = "
 mockk                          = { group = "io.mockk",                  name = "mockk",                           version.ref = "mockk" }
 firebase-bom                   = { group = "com.google.firebase",       name = "firebase-bom",                    version.ref = "firebaseBom" }
 firebase-crashlytics-ktx       = { group = "com.google.firebase",       name = "firebase-crashlytics-ktx" }
+aboutlibraries-compose-m3      = { group = "com.mikepenz",               name = "aboutlibraries-compose-m3",       version.ref = "aboutlibraries" }
 
 [plugins]
 android-application  = { id = "com.android.application",                    version.ref = "agp" }
@@ -67,3 +69,4 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization",  vers
 ksp                  = { id = "com.google.devtools.ksp",                     version.ref = "ksp" }
 google-services      = { id = "com.google.gms.google-services",             version.ref = "googleServices" }
 firebase-crashlytics = { id = "com.google.firebase.crashlytics",            version.ref = "crashlyticsGradle" }
+aboutlibraries       = { id = "com.mikepenz.aboutlibraries.plugin",         version.ref = "aboutlibraries" }

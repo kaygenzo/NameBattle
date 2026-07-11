@@ -129,6 +129,15 @@
     <string name="pdf_dot_separator">·</string>
     <string name="pdf_finalist_decoration">✿</string>
 
+    <!-- About -->
+    <string name="title_about">À propos</string>
+    <string name="label_app_version">Version %s</string>
+    <string name="label_data_sources">Sources de données</string>
+    <string name="label_country_france">France</string>
+    <string name="label_source_insee">Base publique gratuite de l\'INSEE (Institut national de la statistique et des études économiques)</string>
+    <string name="label_open_source_licenses">Licences open source</string>
+    <string name="cd_about">À propos de l\'application</string>
+
     <!-- Name detail sheet -->
     <string name="label_popularity">Popularité</string>
     <string name="label_peak">Pic</string>

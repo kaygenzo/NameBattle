@@ -7,6 +7,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.telen.namebattle.presentation.about.AboutScreen
 import com.telen.namebattle.presentation.auth.AuthScreen
 import com.telen.namebattle.presentation.battle.BattleScreen
 import com.telen.namebattle.presentation.home.HomeScreen
@@ -36,7 +37,12 @@ fun NavGraph(navController: NavHostController = rememberNavController()) {
                 onViewResults = { sessionId ->
                     navController.navigate(Screen.Results(sessionId).route)
                 },
+                onAbout = { navController.navigate(Screen.About.route) },
             )
+        }
+
+        composable(Screen.About.route) {
+            AboutScreen(onBack = { navController.popBackStack() })
         }
 
         composable(Screen.Setup.route) {

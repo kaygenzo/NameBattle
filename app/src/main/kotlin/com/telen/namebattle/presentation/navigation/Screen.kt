@@ -3,6 +3,7 @@ package com.telen.namebattle.presentation.navigation
 sealed class Screen(val route: String) {
     object Home : Screen("home")
     object Setup : Screen("setup")
+    object About : Screen("about")
 
     data class Auth(val sessionId: Long) : Screen("auth/${sessionId}")
     data class Search(val sessionId: Long, val parentIndex: Int) :

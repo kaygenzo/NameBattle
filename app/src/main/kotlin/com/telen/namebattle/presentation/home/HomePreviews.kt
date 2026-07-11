@@ -44,6 +44,7 @@ private fun homeContent(state: HomeUiState) = @Composable {
         onResumeBattle = {},
         onViewResults = {},
         onRestartBattle = {},
+        onAbout = {},
         onDeleteSession = {},
         onDeleteConfirmed = {},
         onDeleteDismissed = {},
