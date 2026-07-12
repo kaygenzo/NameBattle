@@ -56,7 +56,7 @@ android {
         applicationId = "com.telen.namebattle"
         minSdk = 23
         targetSdk = 37
-        versionCode = 1_1_0_2 // major / minor / fixes / iteration
+        versionCode = 1_1_0_3 // major / minor / fixes / iteration
         versionName = "1.1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
